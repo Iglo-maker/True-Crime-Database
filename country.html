@@ -1,401 +1,572 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>True Crime Atlas – Country</title>
   <style>
+    :root {
+      --bg: #0b0b0b;
+      --card: #181818;
+      --accent: #ff3b3b;
+      --accent-soft: rgba(255,59,59,0.25);
+      --text: #f5f5f5;
+      --muted: #9a9a9a;
+    }
+
+    * { box-sizing: border-box; }
+
     body {
       margin: 0;
-      background: #0b0b0b;
-      color: #f5f5f5;
-      font-family: "Poppins", system-ui, -apple-system, sans-serif;
+      font-family: "Poppins", sans-serif;
+      background: var(--bg);
+      color: var(--text);
     }
 
     header {
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      padding: 12px 16px;
-      background: #141414;
-      border-bottom: 1px solid #ff3b3b;
+      justify-content: space-between;
+      padding: 14px 20px;
+      border-bottom: 1px solid #222;
+      background: #101010;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .back-btn {
+      border: 1px solid rgba(255,255,255,0.18);
+      background: transparent;
+      color: var(--text);
+      padding: 6px 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+
+    .back-btn:hover {
+      border-color: var(--accent);
     }
 
     h1 {
       margin: 0;
-      font-size: 1.4rem;
-      color: #ff3b3b;
+      font-size: 1.5rem;
+      color: var(--accent);
     }
 
-    .top-buttons {
+    .header-right {
       display: flex;
-      gap: 8px;
-    }
-
-    button {
-      border: none;
-      border-radius: 8px;
-      padding: 8px 12px;
-      cursor: pointer;
-      font-size: 0.9rem;
-      background: #ff3b3b;
-      color: #ffffff;
-    }
-
-    button.secondary {
-      background: #262626;
-      color: #f5f5f5;
-    }
-
-    main {
-      padding: 16px;
-      max-width: 900px;
-      margin: 0 auto;
-    }
-
-    .filters, .add-form {
-      background: #151515;
-      border-radius: 10px;
-      padding: 12px;
-      margin-bottom: 16px;
-      border: 1px solid #262626;
-    }
-
-    .filters h2, .add-form h2 {
-      font-size: 1rem;
-      margin: 0 0 8px;
-      color: #ff3b3b;
-    }
-
-    .filters-row {
-      display: flex;
-      flex-wrap: wrap;
       gap: 10px;
       align-items: center;
     }
 
-    label {
-      font-size: 0.8rem;
-      color: #bbbbbb;
-      display: block;
-      margin-bottom: 2px;
+    .primary-btn, .secondary-btn {
+      border-radius: 8px;
+      padding: 8px 12px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      border: none;
     }
 
-    select, input, textarea {
-      width: 100%;
-      max-width: 200px;
-      padding: 6px 8px;
-      border-radius: 6px;
+    .primary-btn {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .primary-btn:hover {
+      box-shadow: 0 0 14px rgba(255,59,59,0.4);
+    }
+
+    .secondary-btn {
+      background: #202020;
+      color: var(--text);
       border: 1px solid #333;
-      background: #101010;
-      color: #f5f5f5;
+    }
+
+    .secondary-btn:hover {
+      border-color: var(--accent-soft);
+    }
+
+    main {
+      padding: 16px 20px 40px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin-bottom: 14px;
+    }
+
+    /* Filterleiste */
+    .filter-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 18px;
+      background: #121212;
+      padding: 10px;
+      border-radius: 10px;
+      border: 1px solid #1f1f1f;
+    }
+
+    .filter-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      min-width: 140px;
+    }
+
+    .filter-label {
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+
+    select, input {
+      border-radius: 8px;
+      border: 1px solid #2a2a2a;
+      background: #1a1a1a;
+      color: var(--text);
+      padding: 6px 8px;
       font-size: 0.9rem;
     }
 
-    textarea {
-      max-width: 100%;
-      min-height: 80px;
+    select:focus, input:focus, textarea:focus {
+      outline: none;
+      border-color: var(--accent);
     }
 
-    .form-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit,minmax(200px,1fr));
+    /* Formular zum neuen Fall */
+    #caseForm {
+      margin-top: 16px;
+      margin-bottom: 22px;
+      display: none;
+      background: #151515;
+      border-radius: 10px;
+      padding: 14px;
+      border: 1px solid #2a2a2a;
+    }
+
+    .form-row {
+      display: flex;
+      flex-wrap: wrap;
       gap: 10px;
       margin-bottom: 10px;
     }
 
-    .case-list {
+    .form-field {
+      flex: 1 1 160px;
       display: flex;
       flex-direction: column;
-      gap: 10px;
-      margin-top: 4px;
+      gap: 4px;
+    }
+
+    label {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 110px;
+      border-radius: 8px;
+      border: 1px solid #2a2a2a;
+      background: #1a1a1a;
+      color: var(--text);
+      padding: 8px;
+      resize: vertical;
+      font-size: 0.9rem;
+    }
+
+    /* Case Cards */
+    #caseList {
+      margin-top: 10px;
     }
 
     .case-card {
-      background: #151515;
+      background: var(--card);
       border-radius: 10px;
+      border: 1px solid #222;
+      margin-bottom: 12px;
       padding: 10px 12px;
-      border: 1px solid #262626;
       cursor: pointer;
+      transition: border-color 0.15s, box-shadow 0.15s, transform 0.08s;
     }
 
     .case-card:hover {
-      border-color: #ff3b3b;
-      box-shadow: 0 0 12px rgba(255,59,59,0.25);
+      border-color: var(--accent-soft);
+      box-shadow: 0 0 12px rgba(0,0,0,0.6);
+      transform: translateY(-1px);
     }
 
-    .case-title-row {
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:8px;
-      margin-bottom:4px;
+    .case-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
     }
 
     .case-title {
-      font-weight:600;
-      color:#ffffff;
-      font-size:0.95rem;
+      font-weight: 600;
+      color: var(--accent);
     }
 
     .case-meta {
-      font-size:0.75rem;
-      color:#bbbbbb;
+      font-size: 0.78rem;
+      color: var(--muted);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 4px;
     }
 
-    .case-description {
-      font-size:0.85rem;
-      color:#d0d0d0;
-      margin-top:4px;
-      white-space:pre-wrap;
+    .badge {
+      border-radius: 999px;
+      padding: 2px 7px;
+      border: 1px solid rgba(255,255,255,0.16);
+      font-size: 0.7rem;
     }
 
-    .no-cases {
-      font-size:0.9rem;
-      color:#aaaaaa;
-      margin-top:4px;
+    .badge-type {
+      border-color: var(--accent-soft);
+      color: var(--accent);
     }
 
-    @media (max-width:600px){
-      header { flex-direction:column; align-items:flex-start; gap:8px; }
-      h1 { font-size:1.2rem; }
+    .case-body {
+      display: none;
+      margin-top: 8px;
+      font-size: 0.9rem;
+      line-height: 1.45;
+      color: #e2e2e2;
+    }
+
+    .case-body img {
+      max-width: 100%;
+      border-radius: 8px;
+      margin-top: 6px;
+      display: block;
+    }
+
+    .empty-info {
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin-top: 14px;
+    }
+
+    @media (max-width: 700px) {
+      header { flex-wrap: wrap; gap: 8px; }
+      .header-right { width: 100%; justify-content: flex-end; }
     }
   </style>
 </head>
 <body>
   <header>
+    <button class="back-btn" onclick="window.location.href='index.html'">← Back to Globe</button>
     <h1 id="countryTitle">Country</h1>
-    <div class="top-buttons">
-      <button class="secondary" onclick="window.location.href='index.html'">⬅ Back to Globe</button>
-      <button id="exportBtn" class="secondary">Export Cases</button>
-      <button id="toggleFormBtn">+ Add Case</button>
+    <div class="header-right">
+      <button class="secondary-btn" id="exportBtn">Export Cases</button>
+      <button class="primary-btn" id="toggleFormBtn">+ Add Case</button>
     </div>
   </header>
 
   <main>
-    <!-- Filterbereich -->
-    <section class="filters">
-      <h2>Filter & Search</h2>
-      <div class="filters-row">
-        <div>
-          <label for="filterType">Crime type</label>
-          <select id="filterType">
-            <option value="">All</option>
-            <option value="Murder">Murder</option>
-            <option value="Theft">Theft</option>
-            <option value="Kidnapping">Kidnapping</option>
-            <option value="Heist">Heist</option>
-            <option value="Unsolved">Unsolved</option>
-            <option value="Other">Other</option>
-          </select>
-        </div>
-        <div>
-          <label for="filterYear">Year</label>
-          <input id="filterYear" type="number" placeholder="e.g. 1988" />
-        </div>
-        <div>
-          <label for="searchText">Search (title / text)</label>
-          <input id="searchText" type="text" placeholder="Search..." />
-        </div>
-      </div>
-    </section>
+    <div class="subtitle" id="subtitle"></div>
 
-    <!-- Formular zum Hinzufügen -->
-    <section class="add-form" id="addForm" style="display:none;">
-      <h2>Add new case</h2>
-      <div class="form-grid">
-        <div>
-          <label for="caseTitle">Title*</label>
-          <input id="caseTitle" type="text" />
+    <!-- Filter -->
+    <div class="filter-bar">
+      <div class="filter-group">
+        <span class="filter-label">Crime Type</span>
+        <select id="filterType">
+          <option value="">All types</option>
+          <option value="Murder">Murder</option>
+          <option value="Theft">Theft</option>
+          <option value="Kidnapping">Kidnapping</option>
+          <option value="Robbery">Robbery</option>
+          <option value="Fraud">Fraud</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <span class="filter-label">Year</span>
+        <input type="number" id="filterYear" placeholder="e.g. 1995" />
+      </div>
+      <div class="filter-group">
+        <span class="filter-label">State / Region</span>
+        <select id="filterRegion">
+          <option value="">All regions</option>
+          <!-- options are generated dynamically -->
+        </select>
+      </div>
+    </div>
+
+    <!-- Formular zum neuen Fall -->
+    <section id="caseForm">
+      <div class="form-row">
+        <div class="form-field">
+          <label for="caseTitle">Title</label>
+          <input id="caseTitle" placeholder="Case title" />
         </div>
-        <div>
-          <label for="caseYear">Year*</label>
-          <input id="caseYear" type="number" />
+        <div class="form-field">
+          <label for="caseYear">Year</label>
+          <input id="caseYear" type="number" placeholder="e.g. 1988" />
         </div>
-        <div>
-          <label for="caseType">Crime type*</label>
+        <div class="form-field">
+          <label for="caseType">Crime Type</label>
           <select id="caseType">
-            <option value="">Choose...</option>
+            <option value="">Select type…</option>
             <option value="Murder">Murder</option>
             <option value="Theft">Theft</option>
             <option value="Kidnapping">Kidnapping</option>
-            <option value="Heist">Heist</option>
-            <option value="Unsolved">Unsolved</option>
+            <option value="Robbery">Robbery</option>
+            <option value="Fraud">Fraud</option>
             <option value="Other">Other</option>
           </select>
         </div>
-        <div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-field">
+          <label for="caseRegion">State / Region</label>
+          <input id="caseRegion" placeholder="e.g. Bavaria, Texas, Kansai" />
+        </div>
+        <div class="form-field">
           <label for="caseImage">Image URL (optional)</label>
-          <input id="caseImage" type="url" placeholder="https://..." />
+          <input id="caseImage" placeholder="https://example.com/image.jpg" />
         </div>
       </div>
-      <div>
-        <label for="caseDescription">Description (short, factual)*</label>
-        <textarea id="caseDescription"></textarea>
+
+      <div class="form-field">
+        <label for="caseText">Description (keep it factual and respectful)</label>
+        <textarea id="caseText" placeholder="Write the case here…"></textarea>
       </div>
-      <div style="margin-top:8px;">
-        <button id="saveCaseBtn">Save case</button>
-      </div>
+
+      <button class="primary-btn" id="saveCaseBtn" style="margin-top:10px;">Save Case</button>
     </section>
 
     <!-- Liste der Fälle -->
-    <section>
-      <h2 style="font-size:1rem;color:#ff3b3b;margin-bottom:6px;">Cases in this country</h2>
-      <div id="caseList" class="case-list"></div>
-      <div id="noCases" class="no-cases"></div>
-    </section>
+    <section id="caseList"></section>
   </main>
 
   <script>
-    // ------- Country aus URL auslesen -------
+    // --- Basics: Land aus URL lesen ---
     const params = new URLSearchParams(window.location.search);
     const country = params.get("country") || "Unknown Country";
-    document.getElementById("countryTitle").textContent = country;
 
-    const storageKey = "cases_" + country;
+    const titleEl = document.getElementById("countryTitle");
+    const subtitleEl = document.getElementById("subtitle");
+    titleEl.textContent = country;
+    subtitleEl.textContent = "Cases stored locally for " + country + ". (Data is saved only in this browser)";
 
-    // ------- Fälle laden -------
+    // --- DOM-Elemente ---
+    const caseListEl   = document.getElementById("caseList");
+    const formSection  = document.getElementById("caseForm");
+    const toggleFormBtn = document.getElementById("toggleFormBtn");
+    const saveCaseBtn  = document.getElementById("saveCaseBtn");
+    const exportBtn    = document.getElementById("exportBtn");
+
+    // Formular-Felder
+    const caseTitleEl  = document.getElementById("caseTitle");
+    const caseYearEl   = document.getElementById("caseYear");
+    const caseTypeEl   = document.getElementById("caseType");
+    const caseRegionEl = document.getElementById("caseRegion");
+    const caseImageEl  = document.getElementById("caseImage");
+    const caseTextEl   = document.getElementById("caseText");
+
+    // Filter-Felder
+    const filterTypeEl   = document.getElementById("filterType");
+    const filterYearEl   = document.getElementById("filterYear");
+    const filterRegionEl = document.getElementById("filterRegion");
+
+    // --- Daten aus localStorage laden ---
     let cases = [];
-    try {
-      cases = JSON.parse(localStorage.getItem(storageKey) || "[]");
-    } catch (e) {
-      cases = [];
+    function loadCases() {
+      try {
+        const raw = localStorage.getItem("cases_" + country);
+        cases = raw ? JSON.parse(raw) : [];
+      } catch(e) {
+        cases = [];
+      }
     }
 
-    // ------- Elemente -------
-    const caseListEl = document.getElementById("caseList");
-    const noCasesEl = document.getElementById("noCases");
-    const filterTypeEl = document.getElementById("filterType");
-    const filterYearEl = document.getElementById("filterYear");
-    const searchTextEl = document.getElementById("searchText");
-    const toggleFormBtn = document.getElementById("toggleFormBtn");
-    const addFormEl = document.getElementById("addForm");
-    const saveCaseBtn = document.getElementById("saveCaseBtn");
-    const exportBtn = document.getElementById("exportBtn");
+    function saveCases() {
+      localStorage.setItem("cases_" + country, JSON.stringify(cases));
+    }
 
-    // ------- Render-Funktion -------
+    // --- Regionen-Liste (State/Region-Dropdown) aktualisieren ---
+    function updateRegionFilterOptions() {
+      const regions = new Set();
+      cases.forEach(c => {
+        if(c.region && c.region.trim()) regions.add(c.region.trim());
+      });
+
+      // Alte Optionen löschen
+      filterRegionEl.innerHTML = "";
+      const defaultOpt = document.createElement("option");
+      defaultOpt.value = "";
+      defaultOpt.textContent = "All regions";
+      filterRegionEl.appendChild(defaultOpt);
+
+      Array.from(regions).sort().forEach(r => {
+        const opt = document.createElement("option");
+        opt.value = r;
+        opt.textContent = r;
+        filterRegionEl.appendChild(opt);
+      });
+    }
+
+    // --- Cases rendern mit Filtern ---
     function renderCases() {
       caseListEl.innerHTML = "";
-      const typeFilter = filterTypeEl.value.trim();
-      const yearFilter = filterYearEl.value.trim();
-      const search = searchTextEl.value.trim().toLowerCase();
+
+      if(!cases.length) {
+        caseListEl.innerHTML = '<p class="empty-info">No cases yet. Add your first case above.</p>';
+        return;
+      }
+
+      const typeFilter   = filterTypeEl.value;
+      const yearFilter   = filterYearEl.value;
+      const regionFilter = filterRegionEl.value;
 
       const filtered = cases.filter(c => {
-        if (typeFilter && c.type !== typeFilter) return false;
-        if (yearFilter && String(c.year) !== yearFilter) return false;
-        if (search) {
-          const text = (c.title + " " + c.description).toLowerCase();
-          if (!text.includes(search)) return false;
-        }
+        if(typeFilter && c.type !== typeFilter) return false;
+        if(yearFilter && String(c.year) !== String(yearFilter)) return false;
+        if(regionFilter && c.region !== regionFilter) return false;
         return true;
       });
 
-      if (filtered.length === 0) {
-        noCasesEl.textContent = "No cases found. Add one with the button above.";
+      if(!filtered.length) {
+        caseListEl.innerHTML = '<p class="empty-info">No cases match the current filters.</p>';
         return;
-      } else {
-        noCasesEl.textContent = "";
       }
 
-      filtered.forEach(c => {
-        const card = document.createElement("div");
+      filtered.forEach((c, index) => {
+        const card = document.createElement("article");
         card.className = "case-card";
 
         const header = document.createElement("div");
-        header.className = "case-title-row";
+        header.className = "case-header";
 
         const title = document.createElement("div");
         title.className = "case-title";
-        title.textContent = c.title;
+        title.textContent = c.title || "(Untitled case)";
 
         const meta = document.createElement("div");
         meta.className = "case-meta";
-        meta.textContent = `${c.type || "Unknown type"} · ${c.year || "n/a"}`;
+
+        const yearSpan = document.createElement("span");
+        yearSpan.textContent = c.year ? `Year: ${c.year}` : "Year: unknown";
+
+        const typeSpan = document.createElement("span");
+        typeSpan.className = "badge badge-type";
+        typeSpan.textContent = c.type || "Type: n/a";
+
+        const regionSpan = document.createElement("span");
+        regionSpan.className = "badge";
+        regionSpan.textContent = c.region ? `Region: ${c.region}` : "Region: n/a";
+
+        meta.appendChild(yearSpan);
+        meta.appendChild(typeSpan);
+        meta.appendChild(regionSpan);
 
         header.appendChild(title);
         header.appendChild(meta);
-        card.appendChild(header);
 
-        if (c.imageUrl) {
+        const body = document.createElement("div");
+        body.className = "case-body";
+
+        const textP = document.createElement("p");
+        textP.textContent = c.text || "(no description)";
+        body.appendChild(textP);
+
+        if(c.imageUrl) {
           const img = document.createElement("img");
           img.src = c.imageUrl;
-          img.alt = c.title;
-          img.style.maxWidth = "100%";
-          img.style.borderRadius = "6px";
-          img.style.margin = "4px 0";
-          card.appendChild(img);
+          img.alt = "Case image";
+          body.appendChild(img);
         }
 
-        const desc = document.createElement("div");
-        desc.className = "case-description";
-        desc.textContent = c.description;
-        card.appendChild(desc);
+        card.appendChild(header);
+        card.appendChild(body);
+
+        // Klick: Body auf/zu
+        card.addEventListener("click", () => {
+          const isVisible = body.style.display === "block";
+          body.style.display = isVisible ? "none" : "block";
+        });
 
         caseListEl.appendChild(card);
       });
     }
 
-    // ------- Filter-Events -------
-    [filterTypeEl, filterYearEl, searchTextEl].forEach(el => {
-      el.addEventListener("input", renderCases);
-      el.addEventListener("change", renderCases);
-    });
-
-    // ------- Formular ein-/ausblenden -------
+    // --- Formular anzeigen/verstecken ---
     toggleFormBtn.addEventListener("click", () => {
-      const visible = addFormEl.style.display !== "none";
-      addFormEl.style.display = visible ? "none" : "block";
+      const visible = formSection.style.display === "block";
+      formSection.style.display = visible ? "none" : "block";
     });
 
-    // ------- Fall speichern -------
+    // --- Neuen Fall speichern ---
     saveCaseBtn.addEventListener("click", () => {
-      const title = document.getElementById("caseTitle").value.trim();
-      const year = document.getElementById("caseYear").value.trim();
-      const type = document.getElementById("caseType").value.trim();
-      const description = document.getElementById("caseDescription").value.trim();
-      const imageUrl = document.getElementById("caseImage").value.trim();
+      const title = caseTitleEl.value.trim();
+      const year  = caseYearEl.value.trim();
+      const type  = caseTypeEl.value;
+      const region = caseRegionEl.value.trim();
+      const image = caseImageEl.value.trim();
+      const text  = caseTextEl.value.trim();
 
-      if (!title || !year || !type || !description) {
-        alert("Please fill in all required fields (Title, Year, Type, Description).");
+      if(!title || !year || !type || !region || !text) {
+        alert("Please fill in Title, Year, Type, Region and Description.");
         return;
       }
 
-      const entry = {
+      const yearNum = parseInt(year, 10);
+
+      const newCase = {
         title,
-        year: Number(year),
+        year: isNaN(yearNum) ? year : yearNum,
         type,
-        description,
-        imageUrl
+        region,
+        imageUrl: image || "",
+        text,
+        createdAt: new Date().toISOString()
       };
 
-      cases.push(entry);
-      localStorage.setItem(storageKey, JSON.stringify(cases));
+      cases.push(newCase);
+      saveCases();
+      updateRegionFilterOptions();
+      renderCases();
 
       // Formular leeren
-      document.getElementById("caseTitle").value = "";
-      document.getElementById("caseYear").value = "";
-      document.getElementById("caseType").value = "";
-      document.getElementById("caseDescription").value = "";
-      document.getElementById("caseImage").value = "";
+      caseTitleEl.value = "";
+      caseYearEl.value = "";
+      caseTypeEl.value = "";
+      caseRegionEl.value = "";
+      caseImageEl.value = "";
+      caseTextEl.value = "";
 
-      addFormEl.style.display = "none";
-      renderCases();
+      formSection.style.display = "none";
     });
 
-    // ------- Export-Funktion -------
+    // --- Filter-Events ---
+    filterTypeEl.addEventListener("change", renderCases);
+    filterYearEl.addEventListener("input", renderCases);
+    filterRegionEl.addEventListener("change", renderCases);
+
+    // --- Export-Funktion ---
     exportBtn.addEventListener("click", () => {
-      const blob = new Blob([JSON.stringify(cases, null, 2)], { type: "application/json" });
-      const url = URL.createObjectURL(blob);
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(cases, null, 2));
       const a = document.createElement("a");
-      a.href = url;
-      a.download = `true-crime-${country.replace(/\s+/g,"_").toLowerCase()}-cases.json`;
+      a.setAttribute("href", dataStr);
+      a.setAttribute("download", `true-crime-${country.replace(/\s+/g,'_')}.json`);
       document.body.appendChild(a);
       a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
+      a.remove();
     });
 
-    // initial anzeigen
+    // Initial laden
+    loadCases();
+    updateRegionFilterOptions();
     renderCases();
   </script>
 </body>
