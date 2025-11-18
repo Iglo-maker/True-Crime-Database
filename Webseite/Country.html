@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>True Crime Atlas – Country</title>
+  <style>
+    body {
+      margin: 0;
+      background: #0b0b0b;
+      color: #f5f5f5;
+      font-family: "Poppins", system-ui, -apple-system, sans-serif;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 16px;
+      background: #141414;
+      border-bottom: 1px solid #ff3b3b;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 1.4rem;
+      color: #ff3b3b;
+    }
+
+    .top-buttons {
+      display: flex;
+      gap: 8px;
+    }
+
+    button {
+      border: none;
+      border-radius: 8px;
+      padding: 8px 12px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      background: #ff3b3b;
+      color: #ffffff;
+    }
+
+    button.secondary {
+      background: #262626;
+      color: #f5f5f5;
+    }
+
+    main {
+      padding: 16px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .filters, .add-form {
+      background: #151515;
+      border-radius: 10px;
+      padding: 12px;
+      margin-bottom: 16px;
+      border: 1px solid #262626;
+    }
+
+    .filters h2, .add-form h2 {
+      font-size: 1rem;
+      margin: 0 0 8px;
+      color: #ff3b3b;
+    }
+
+    .filters-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    label {
+      font-size: 0.8rem;
+      color: #bbbbbb;
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    select, input, textarea {
+      width: 100%;
+      max-width: 200px;
+      padding: 6px 8px;
+      border-radius: 6px;
+      border: 1px solid #333;
+      background: #101010;
+      color: #f5f5f5;
+      font-size: 0.9rem;
+    }
+
+    textarea {
+      max-width: 100%;
+      min-height: 80px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit,minmax(200px,1fr));
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .case-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 4px;
+    }
+
+    .case-card {
+      background: #151515;
+      border-radius: 10px;
+      padding: 10px 12px;
+      border: 1px solid #262626;
+      cursor: pointer;
+    }
+
+    .case-card:hover {
+      border-color: #ff3b3b;
+      box-shadow: 0 0 12px rgba(255,59,59,0.25);
+    }
+
+    .case-title-row {
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:8px;
+      margin-bottom:4px;
+    }
+
+    .case-title {
+      font-weight:600;
+      color:#ffffff;
+      font-size:0.95rem;
+    }
+
+    .case-meta {
+      font-size:0.75rem;
+      color:#bbbbbb;
+    }
+
+    .case-description {
+      font-size:0.85rem;
+      color:#d0d0d0;
+      margin-top:4px;
+      white-space:pre-wrap;
+    }
+
+    .no-cases {
+      font-size:0.9rem;
+      color:#aaaaaa;
+      margin-top:4px;
+    }
+
+    @media (max-width:600px){
+      header { flex-direction:column; align-items:flex-start; gap:8px; }
+      h1 { font-size:1.2rem; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1 id="countryTitle">Country</h1>
+    <div class="top-buttons">
+      <button class="secondary" onclick="window.location.href='index.html'">⬅ Back to Globe</button>
+      <button id="exportBtn" class="secondary">Export Cases</button>
+      <button id="toggleFormBtn">+ Add Case</button>
+    </div>
+  </header>
+
+  <main>
+    <!-- Filterbereich -->
+    <section class="filters">
+      <h2>Filter & Search</h2>
+      <div class="filters-row">
+        <div>
+          <label for="filterType">Crime type</label>
+          <select id="filterType">
+            <option value="">All</option>
+            <option value="Murder">Murder</option>
+            <option value="Theft">Theft</option>
+            <option value="Kidnapping">Kidnapping</option>
+            <option value="Heist">Heist</option>
+            <option value="Unsolved">Unsolved</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div>
+          <label for="filterYear">Year</label>
+          <input id="filterYear" type="number" placeholder="e.g. 1988" />
+        </div>
+        <div>
+          <label for="searchText">Search (title / text)</label>
+          <input id="searchText" type="text" placeholder="Search..." />
+        </div>
+      </div>
+    </section>
+
+    <!-- Formular zum Hinzufügen -->
+    <section class="add-form" id="addForm" style="display:none;">
+      <h2>Add new case</h2>
+      <div class="form-grid">
+        <div>
+          <label for="caseTitle">Title*</label>
+          <input id="caseTitle" type="text" />
+        </div>
+        <div>
+          <label for="caseYear">Year*</label>
+          <input id="caseYear" type="number" />
+        </div>
+        <div>
+          <label for="caseType">Crime type*</label>
+          <select id="caseType">
+            <option value="">Choose...</option>
+            <option value="Murder">Murder</option>
+            <option value="Theft">Theft</option>
+            <option value="Kidnapping">Kidnapping</option>
+            <option value="Heist">Heist</option>
+            <option value="Unsolved">Unsolved</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div>
+          <label for="caseImage">Image URL (optional)</label>
+          <input id="caseImage" type="url" placeholder="https://..." />
+        </div>
+      </div>
+      <div>
+        <label for="caseDescription">Description (short, factual)*</label>
+        <textarea id="caseDescription"></textarea>
+      </div>
+      <div style="margin-top:8px;">
+        <button id="saveCaseBtn">Save case</button>
+      </div>
+    </section>
+
+    <!-- Liste der Fälle -->
+    <section>
+      <h2 style="font-size:1rem;color:#ff3b3b;margin-bottom:6px;">Cases in this country</h2>
+      <div id="caseList" class="case-list"></div>
+      <div id="noCases" class="no-cases"></div>
+    </section>
+  </main>
+
+  <script>
+    // ------- Country aus URL auslesen -------
+    const params = new URLSearchParams(window.location.search);
+    const country = params.get("country") || "Unknown Country";
+    document.getElementById("countryTitle").textContent = country;
+
+    const storageKey = "cases_" + country;
+
+    // ------- Fälle laden -------
+    let cases = [];
+    try {
+      cases = JSON.parse(localStorage.getItem(storageKey) || "[]");
+    } catch (e) {
+      cases = [];
+    }
+
+    // ------- Elemente -------
+    const caseListEl = document.getElementById("caseList");
+    const noCasesEl = document.getElementById("noCases");
+    const filterTypeEl = document.getElementById("filterType");
+    const filterYearEl = document.getElementById("filterYear");
+    const searchTextEl = document.getElementById("searchText");
+    const toggleFormBtn = document.getElementById("toggleFormBtn");
+    const addFormEl = document.getElementById("addForm");
+    const saveCaseBtn = document.getElementById("saveCaseBtn");
+    const exportBtn = document.getElementById("exportBtn");
+
+    // ------- Render-Funktion -------
+    function renderCases() {
+      caseListEl.innerHTML = "";
+      const typeFilter = filterTypeEl.value.trim();
+      const yearFilter = filterYearEl.value.trim();
+      const search = searchTextEl.value.trim().toLowerCase();
+
+      const filtered = cases.filter(c => {
+        if (typeFilter && c.type !== typeFilter) return false;
+        if (yearFilter && String(c.year) !== yearFilter) return false;
+        if (search) {
+          const text = (c.title + " " + c.description).toLowerCase();
+          if (!text.includes(search)) return false;
+        }
+        return true;
+      });
+
+      if (filtered.length === 0) {
+        noCasesEl.textContent = "No cases found. Add one with the button above.";
+        return;
+      } else {
+        noCasesEl.textContent = "";
+      }
+
+      filtered.forEach(c => {
+        const card = document.createElement("div");
+        card.className = "case-card";
+
+        const header = document.createElement("div");
+        header.className = "case-title-row";
+
+        const title = document.createElement("div");
+        title.className = "case-title";
+        title.textContent = c.title;
+
+        const meta = document.createElement("div");
+        meta.className = "case-meta";
+        meta.textContent = `${c.type || "Unknown type"} · ${c.year || "n/a"}`;
+
+        header.appendChild(title);
+        header.appendChild(meta);
+        card.appendChild(header);
+
+        if (c.imageUrl) {
+          const img = document.createElement("img");
+          img.src = c.imageUrl;
+          img.alt = c.title;
+          img.style.maxWidth = "100%";
+          img.style.borderRadius = "6px";
+          img.style.margin = "4px 0";
+          card.appendChild(img);
+        }
+
+        const desc = document.createElement("div");
+        desc.className = "case-description";
+        desc.textContent = c.description;
+        card.appendChild(desc);
+
+        caseListEl.appendChild(card);
+      });
+    }
+
+    // ------- Filter-Events -------
+    [filterTypeEl, filterYearEl, searchTextEl].forEach(el => {
+      el.addEventListener("input", renderCases);
+      el.addEventListener("change", renderCases);
+    });
+
+    // ------- Formular ein-/ausblenden -------
+    toggleFormBtn.addEventListener("click", () => {
+      const visible = addFormEl.style.display !== "none";
+      addFormEl.style.display = visible ? "none" : "block";
+    });
+
+    // ------- Fall speichern -------
+    saveCaseBtn.addEventListener("click", () => {
+      const title = document.getElementById("caseTitle").value.trim();
+      const year = document.getElementById("caseYear").value.trim();
+      const type = document.getElementById("caseType").value.trim();
+      const description = document.getElementById("caseDescription").value.trim();
+      const imageUrl = document.getElementById("caseImage").value.trim();
+
+      if (!title || !year || !type || !description) {
+        alert("Please fill in all required fields (Title, Year, Type, Description).");
+        return;
+      }
+
+      const entry = {
+        title,
+        year: Number(year),
+        type,
+        description,
+        imageUrl
+      };
+
+      cases.push(entry);
+      localStorage.setItem(storageKey, JSON.stringify(cases));
+
+      // Formular leeren
+      document.getElementById("caseTitle").value = "";
+      document.getElementById("caseYear").value = "";
+      document.getElementById("caseType").value = "";
+      document.getElementById("caseDescription").value = "";
+      document.getElementById("caseImage").value = "";
+
+      addFormEl.style.display = "none";
+      renderCases();
+    });
+
+    // ------- Export-Funktion -------
+    exportBtn.addEventListener("click", () => {
+      const blob = new Blob([JSON.stringify(cases, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `true-crime-${country.replace(/\s+/g,"_").toLowerCase()}-cases.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    });
+
+    // initial anzeigen
+    renderCases();
+  </script>
+</body>
+</html>
