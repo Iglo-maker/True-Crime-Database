@@ -2,21 +2,27 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>True Crime Atlas</title>
 
-  <!-- Three.js + Globe.gl -->
+  <!-- Three.js & Globe.gl -->
   <script src="https://unpkg.com/three@0.150.0/build/three.min.js"></script>
   <script src="https://unpkg.com/globe.gl"></script>
 
   <style>
+    :root {
+      --bg: #000000;
+      --accent: #ff3b3b;
+      --text: #f5f5f5;
+    }
+
     html, body {
       margin: 0;
       height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: "Poppins", sans-serif;
       overflow: hidden;
-      background: #000000;
-      font-family: "Poppins", system-ui, -apple-system, sans-serif;
-      color: #f5f5f5;
     }
 
     #globeViz {
@@ -38,104 +44,93 @@
 
     header h1 {
       margin: 0;
-      font-size: 2.3rem;
-      color: #ff3b3b;
-      letter-spacing: 2px;
-      text-shadow: 0 0 10px rgba(255, 59, 59, 0.5);
+      font-size: 2.2rem;
+      color: var(--accent);
       pointer-events: auto;
+      text-shadow: 0 0 10px rgba(255,59,59,0.4);
     }
 
-    footer {
+    /* Heatmap Legend */
+    #heatLegend {
       position: absolute;
-      bottom: 8px;
-      width: 100%;
-      text-align: center;
+      bottom: 20px;
+      left: 20px;
+      background: rgba(20,20,20,0.75);
+      padding: 12px 14px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      color: #eee;
+      border: 1px solid rgba(255,255,255,0.2);
       z-index: 10;
-      color: #888;
-      font-size: 0.8rem;
-      pointer-events: none;
     }
-
-    /* kleines Menü links (nur für später nutzbar, aktuell nur Style) */
-    .left-menu {
-      position: absolute;
-      left: 14px;
-      top: 80px;
-      z-index: 11;
+    #heatLegend .legend-title {
+      font-weight: bold;
+      color: #ff5555;
+      margin-bottom: 6px;
+    }
+    .legend-item {
       display: flex;
-      flex-direction: column;
-      gap: 8px;
-      padding: 10px;
-      border-radius: 10px;
-      background: rgba(15, 15, 15, 0.8);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      backdrop-filter: blur(6px);
-    }
-
-    .left-menu button {
-      min-width: 110px;
-      padding: 6px 10px;
-      border-radius: 8px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      background: transparent;
-      color: #f5f5f5;
-      cursor: pointer;
-      font-size: 0.85rem;
-      text-align: left;
-    }
-
-    .left-menu button:hover {
-      background: rgba(255, 59, 59, 0.2);
-      border-color: #ff3b3b;
-    }
-
-    .group-title {
-      font-size: 0.8rem;
-      color: #bbbbbb;
-      padding: 2px 2px 4px;
-    }
-
-    .mode-switch {
-      position: absolute;
-      left: 14px;
-      bottom: 14px;
-      z-index: 11;
-      display: flex;
-      gap: 6px;
       align-items: center;
-      padding: 8px;
-      border-radius: 10px;
-      background: rgba(15, 15, 15, 0.8);
-      border: 1px solid rgba(255, 255, 255, 0.08);
+      margin: 4px 0;
     }
-
-    .mode-switch button {
-      padding: 5px 8px;
-      border-radius: 8px;
-      border: none;
-      background: transparent;
-      color: #f5f5f5;
-      cursor: pointer;
-      font-size: 0.8rem;
+    .legend-box {
+      width: 16px;
+      height: 16px;
+      border-radius: 3px;
+      margin-right: 8px;
+      display: inline-block;
     }
+    .legend-box.none   { background: rgba(255,255,255,0.15); }
+    .legend-box.low    { background: rgba(255,80,80,0.35); }
+    .legend-box.medium { background: rgba(255,50,50,0.55); }
+    .legend-box.high   { background: rgba(255,0,0,0.80); }
 
-    .mode-switch button.active {
+    /* Buttons */
+    #topBtn, #rotBtn {
+      position: absolute;
+      right: 20px;
       background: #ff3b3b;
-      color: #ffffff;
-      box-shadow: 0 0 12px rgba(255, 59, 59, 0.6);
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      font-size: 0.9rem;
+      border-radius: 6px;
+      cursor: pointer;
+      z-index: 10;
+      transition: .15s;
+      box-shadow: 0 0 10px rgba(255,59,59,0.4);
     }
 
-    @media (max-width: 700px) {
-      header h1 { font-size: 1.6rem; }
-      .left-menu button { min-width: 90px; }
+    #topBtn {
+      top: 20px;
+    }
+
+    #rotBtn {
+      top: 70px;
+      background: #222;
+      box-shadow: none;
+      border: 1px solid #444;
+    }
+
+    #rotBtn:hover {
+      border-color: #ff3b3b;
+      color: #ff3b3b;
+    }
+    #topBtn:hover {
+      background: #ff2020;
+      transform: scale(1.05);
     }
   </style>
 </head>
 <body>
-  <header><h1>True Crime Atlas</h1></header>
 
-  <div id="globeViz"></div>
-  <!-- Heatmap Legend -->
+<header>
+  <h1>True Crime Atlas</h1>
+</header>
+
+<div id="globeViz"></div>
+
+<!-- Heatmap Legend -->
 <div id="heatLegend">
   <div class="legend-title">Crime Heatmap</div>
   <div class="legend-item"><span class="legend-box none"></span> No cases</div>
@@ -144,157 +139,145 @@
   <div class="legend-item"><span class="legend-box high"></span> 10+ cases</div>
 </div>
 
-<!-- Top Countries Button -->
+<!-- Top Countries -->
 <button id="topBtn">Highlight Top Countries</button>
 
-  <!-- Links Menü (Kontinente + Random) -->
-  <div class="left-menu">
-    <div class="group-title">Regions</div>
-    <button data-lat="54.5260" data-lng="15.2551" data-alt="2.2" class="continent-btn">Europe</button>
-    <button data-lat="34.0479" data-lng="100.6197" data-alt="2.2" class="continent-btn">Asia</button>
-    <button data-lat="-8.7832" data-lng="34.5085" data-alt="2.5" class="continent-btn">Africa</button>
-    <button data-lat="20.0" data-lng="-100.0" data-alt="2.3" class="continent-btn">North America</button>
-    <button data-lat="-15.6" data-lng="-60.1" data-alt="2.6" class="continent-btn">South America</button>
-    <button data-lat="-25.0" data-lng="135.0" data-alt="2.8" class="continent-btn">Oceania</button>
+<!-- Rotation Toggle -->
+<button id="rotBtn">Stop Rotation</button>
 
-    <div style="height:6px"></div>
-    <div class="group-title">Actions</div>
-    <button id="randomCountryBtn">Random Country</button>
-  </div>
 
-  <!-- Mode Switch unten links -->
-  <div class="mode-switch">
-    <button class="mode-btn active" data-mode="normal">Normal</button>
-    <button class="mode-btn" data-mode="dark">Dark</button>
-    <button class="mode-btn" data-mode="white">White</button>
-  </div>
+<script>
+/* === Globe Setup === */
+const globe = Globe()(document.getElementById("globeViz"))
+  .globeImageUrl("https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg")
+  .bumpImageUrl("//unpkg.com/three-globe/example/img/earth-topology.png")
+  .backgroundColor("#000000")
+  .showAtmosphere(true)
+  .atmosphereColor("#ff3b3b")
+  .atmosphereAltitude(0.15)
+  .polygonsTransitionDuration(200);
 
-  <footer>© 2025 True Crime Atlas | Educational Project</footer>
+const controls = globe.controls();
+controls.autoRotate = true;
+controls.autoRotateSpeed = 0.7;
 
-  <script>
-    // ---------- Globus einrichten ----------
-    const globe = Globe()(document.getElementById('globeViz'))
-      .globeImageUrl('https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg')
-      .bumpImageUrl('//unpkg.com/three-globe/example/img/earth-topology.png')
-      .backgroundColor('#000000')
-      .showAtmosphere(true)
-      .atmosphereColor('#ff3b3b')
-      .atmosphereAltitude(0.18)
-      .polygonsTransitionDuration(200);
+const renderer = globe.renderer();
+renderer.toneMappingExposure = 1.3;
 
-    globe.controls().autoRotate = true;
-    globe.controls().autoRotateSpeed = 0.7;
+let countriesData = [];
+let hoveredPolygon = null;
 
-    let hoverCountry = null;
-    let allCountries = [];
+/* === LOCAL STORAGE CASE COUNTS === */
+function getCaseCountForCountry(name) {
+  const raw = localStorage.getItem("cases_" + name);
+  if (!raw) return 0;
 
-    // Länderpolygone laden
-    fetch('https://raw.githubusercontent.com/vasturiano/globe.gl/master/example/datasets/ne_110m_admin_0_countries.geojson')
-      .then(res => res.json())
-      .then(data => {
-        allCountries = data.features;
+  try {
+    const list = JSON.parse(raw);
+    return Array.isArray(list) ? list.length : 0;
+  } catch {
+    return 0;
+  }
+}
 
-       let hoverCountry = null;
-let selectedCountry = null;
+/* === HEATMAP COLOR === */
+function heatColor(countryName) {
+  const c = getCaseCountForCountry(countryName);
 
-globe
-  .polygonsData(allCountries)
-  .polygonCapColor(d => {
-    if (d === selectedCountry) return 'rgba(255,80,80,0.85)';   // 🔴 angeklicktes Land
-    if (d === hoverCountry)    return 'rgba(255,59,59,0.55)';   // 🔴 Hover
-    return 'rgba(255,255,255,0.12)';                           // normal
-  })
-  .polygonSideColor(() => 'rgba(255,255,255,0.30)')
-  .polygonStrokeColor(() => 'rgba(255,255,255,0.80)')
-  .polygonLabel(d => d.properties.ADMIN)
+  if (c === 0) return "rgba(255,255,255,0.15)";
+  if (c <= 3) return "rgba(255,80,80,0.35)";
+  if (c <= 10) return "rgba(255,50,50,0.55)";
+  return "rgba(255,0,0,0.80)";
+}
 
-  .onPolygonHover(d => {
-    hoverCountry = d || null;
-  })
+/* === 3D HEIGHT / EXTRUSION === */
+function heightFactor(countryName) {
+  const c = getCaseCountForCountry(countryName);
+  if (c === 0) return 0.003;
+  if (c <= 3) return 0.015;
+  if (c <= 10) return 0.03;
+  return 0.06;
+}
 
-  .onPolygonClick(d => {
-    selectedCountry = d;   // speichert das angeklickte Land → wird rot
+/* === Load Country Shapes === */
+fetch("https://raw.githubusercontent.com/vasturiano/globe.gl/master/example/datasets/ne_110m_admin_0_countries.geojson")
+  .then(res => res.json())
+  .then(data => {
+    countriesData = data.features;
 
-    // re-render Farben
-    globe.polygonCapColor(globe.polygonCapColor());
-
-    const countryName = d.properties.ADMIN;
-
-    // kleine Verzögerung, damit man das Rot sieht
-    setTimeout(() => {
-      window.location.href = `country.html?country=${encodeURIComponent(countryName)}`;
-    }, 250);
-  });
-      });
-
-    // ---------- Kontinent-Buttons ----------
-    document.querySelectorAll('.continent-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const lat = parseFloat(btn.dataset.lat);
-        const lng = parseFloat(btn.dataset.lng);
-        const alt = parseFloat(btn.dataset.alt);
-        globe.pointOfView({ lat, lng, altitude: alt }, 1000);
-      });
-    });
-
-    // ---------- Random Country ----------
-    document.getElementById('randomCountryBtn').addEventListener('click', () => {
-      if (!allCountries.length) return;
-      const random = allCountries[Math.floor(Math.random() * allCountries.length)];
-      const name = random.properties.ADMIN;
-
-      // grobe Positionsbestimmung
-      let lat = 0, lng = 0;
-      try {
-        const geom = random.geometry;
-        let coords = null;
-        if (geom.type === 'Polygon') coords = geom.coordinates[0];
-        if (geom.type === 'MultiPolygon') coords = geom.coordinates[0][0];
-        if (coords && coords.length) {
-          let sumLat = 0, sumLng = 0;
-          coords.forEach(c => { sumLng += c[0]; sumLat += c[1]; });
-          lat = sumLat / coords.length;
-          lng = sumLng / coords.length;
-        }
-      } catch (e) {}
-
-      globe.pointOfView({ lat, lng, altitude: 2.0 }, 1000);
-      setTimeout(() => {
+    globe
+      .polygonsData(countriesData)
+      .extrudePolygons(true)
+      .polygonAltitude(d => heightFactor(d.properties.ADMIN))
+      .polygonCapColor(d => heatColor(d.properties.ADMIN))
+      .polygonSideColor(() => "rgba(255,255,255,0.25)")
+      .polygonStrokeColor(() => "rgba(255,255,255,0.8)")
+      .onPolygonHover(d => {
+        hoveredPolygon = d;
+        globe.polygonCapColor(f =>
+          f === hoveredPolygon
+            ? "rgba(255,59,59,0.6)"
+            : heatColor(f.properties.ADMIN)
+        );
+      })
+      .onPolygonClick(d => {
+        const name = d.properties.ADMIN;
         window.location.href = `country.html?country=${encodeURIComponent(name)}`;
-      }, 1100);
-    });
+      });
+  });
 
-    // ---------- Mode Switch ----------
-    const modeButtons = document.querySelectorAll('.mode-btn');
+/* === HIGHLIGHT TOP COUNTRIES === */
+function getTopCountries() {
+  let scores = [];
 
-    function applyMode(mode) {
-      modeButtons.forEach(b => b.classList.toggle('active', b.dataset.mode === mode));
+  countriesData.forEach(c => {
+    const name = c.properties.ADMIN;
+    const count = getCaseCountForCountry(name);
+    if (count > 0) scores.push({ name, count, obj: c });
+  });
 
-      const globeDiv = document.getElementById('globeViz');
-      const canvas = globeDiv.querySelector('canvas');
+  return scores.sort((a, b) => b.count - a.count).slice(0, 5);
+}
 
-      if (mode === 'normal') {
-        document.body.style.background = '#000000';
-        globeDiv.style.background = '#000000';
-        if (canvas) canvas.style.filter = 'none';
-      } else if (mode === 'dark') {
-        document.body.style.background = '#050505';
-        globeDiv.style.background = '#050505';
-        if (canvas) canvas.style.filter = 'grayscale(1) contrast(1.1) brightness(0.9)';
-      } else if (mode === 'white') {
-        document.body.style.background = '#f6f6f6';
-        globeDiv.style.background = '#f6f6f6';
-        if (canvas) canvas.style.filter = 'grayscale(0) brightness(1.05) saturate(0.4)';
-      }
+function zoomToTopCountries() {
+  const top = getTopCountries();
+
+  if (top.length === 0) {
+    alert("No countries with cases.");
+    return;
+  }
+
+  // highlight top
+  globe.polygonCapColor(f => {
+    const name = f.properties.ADMIN;
+    if (top.find(t => t.name === name)) {
+      return "rgba(255,0,0,0.95)";
     }
+    return heatColor(name);
+  });
 
-    modeButtons.forEach(btn => {
-      btn.addEventListener('click', () => applyMode(btn.dataset.mode));
-    });
+  // zoom to top #1
+  const first = top[0].obj;
+  const center = first.properties.LABEL_X ? {
+    lat: first.properties.LABEL_Y,
+    lng: first.properties.LABEL_X
+  } : { lat: 20, lng: 0 };
 
-    // Standard: Normal Mode
-    // Canvas kann leicht verzögert kommen → Timeout
-    setTimeout(() => applyMode('normal'), 500);
-  </script>
+  globe.pointOfView({ lat: center.lat, lng: center.lng, altitude: 1.6 }, 1500);
+}
+
+document.getElementById("topBtn").addEventListener("click", zoomToTopCountries);
+
+/* === ROTATION TOGGLE === */
+let rotationEnabled = true;
+
+document.getElementById("rotBtn").addEventListener("click", () => {
+  rotationEnabled = !rotationEnabled;
+  controls.autoRotate = rotationEnabled;
+  document.getElementById("rotBtn").textContent =
+    rotationEnabled ? "Stop Rotation" : "Start Rotation";
+});
+</script>
+
 </body>
 </html>
