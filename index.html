@@ -1,351 +1,407 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>True Crime Atlas</title>
-
-  <!-- Three.js + Globe.gl -->
-  <script src="https://unpkg.com/three@0.150.0/build/three.min.js"></script>
-  <script src="https://unpkg.com/globe.gl"></script>
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>True Crime Atlas – Country</title>
   <style>
-    :root{
-      --bg-normal: #0b0b0b;
-      --bg-dark: #050505;
-      --bg-white: #ffffff;
-      --text-normal: #f5f5f5;
-      --text-dark: #f5f5f5;
-      --text-white: #111111;
-      --accent: #ff3b3b;
+    body {
+      margin: 0;
+      font-family: "Poppins", sans-serif;
+      background: #0b0b0b;
+      color: #f5f5f5;
     }
 
-    html,body{
-      height:100%;
-      margin:0;
-      font-family: "Poppins",sans-serif;
-      overflow:hidden;
-      background: var(--bg-normal);
-      color: var(--text-normal);
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 18px;
+      background: #111;
+      border-bottom: 1px solid #ff3b3b;
     }
 
-    #globeViz{
-      position:absolute;
-      inset:0;
-      width:100%;
-      height:100%;
-      background: var(--bg-normal);
+    header h1 {
+      margin: 0;
+      font-size: 1.4rem;
+      color: #ff3b3b;
     }
 
-    header{
-      position:absolute;
-      top:18px;
-      left:50%;
-      transform:translateX(-50%);
-      z-index:12;
-      pointer-events:none;
-      text-align:center;
-    }
-    header h1{
-      margin:0;
-      color:var(--accent);
-      text-shadow:0 0 8px rgba(255,59,59,0.18);
-      letter-spacing:1.5px;
-      font-size:2rem;
-      pointer-events:auto;
+    header button {
+      border: 1px solid rgba(255,255,255,0.3);
+      background: transparent;
+      color: #f5f5f5;
+      border-radius: 8px;
+      padding: 6px 10px;
+      cursor: pointer;
     }
 
-    .left-menu{
-      position:absolute;
-      left:14px;
-      top:80px;
-      z-index:14;
-      display:flex;
-      flex-direction:column;
-      gap:10px;
-      background: rgba(18,18,18,0.7);
-      padding:10px;
-      border-radius:10px;
-      border:1px solid rgba(255,255,255,0.08);
-      backdrop-filter: blur(6px);
-    }
-    .left-menu .group-title{
-      color:#bdbdbd;
-      font-size:0.8rem;
-      padding:4px 6px;
-    }
-    .left-menu button{
-      background:transparent;
-      color:#f5f5f5;
-      border:1px solid rgba(255,255,255,0.18);
-      padding:8px 10px;
-      border-radius:8px;
-      cursor:pointer;
-      min-width:120px;
-      text-align:left;
-      font-size:0.9rem;
-    }
-    .left-menu button:hover{
-      background:rgba(255,255,255,0.06);
+    main {
+      padding: 14px 18px 40px;
+      max-width: 900px;
+      margin: 0 auto;
     }
 
-    .mode-switch{
-      position:absolute;
-      left:14px;
-      bottom:14px;
-      z-index:14;
-      display:flex;
-      gap:8px;
-      align-items:center;
-      background: rgba(18,18,18,0.7);
-      padding:8px;
-      border-radius:10px;
-      border:1px solid rgba(255,255,255,0.08);
-    }
-    .mode-switch button{
-      padding:6px 8px;
-      border-radius:8px;
-      border:none;
-      cursor:pointer;
-      background:transparent;
-      color:#f5f5f5;
-      font-size:0.85rem;
-    }
-    .mode-switch button.active{
-      background:var(--accent);
-      color:#ffffff;
-      box-shadow:0 6px 18px rgba(255,59,59,0.25);
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 14px;
+      align-items: center;
     }
 
-    footer{
-      position:absolute;
-      bottom:10px;
-      right:10px;
-      z-index:12;
-      color:#9a9a9a;
-      font-size:0.8rem;
+    .controls input,
+    .controls select {
+      padding: 6px 8px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.2);
+      background: #181818;
+      color: #f5f5f5;
+      min-width: 120px;
     }
 
-    @media (max-width:700px){
-      header h1{ font-size:1.3rem; }
-      .left-menu button{ min-width:90px; font-size:0.8rem; }
+    .controls button {
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.3);
+      background: #202020;
+      color: #f5f5f5;
+      padding: 6px 10px;
+      cursor: pointer;
+    }
+
+    .controls button:hover {
+      background: #2b2b2b;
+    }
+
+    #caseForm {
+      display: none;
+      margin-bottom: 16px;
+      padding: 12px;
+      border-radius: 10px;
+      background: #151515;
+      border: 1px solid rgba(255,255,255,0.2);
+      display: none;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    #caseForm input,
+    #caseForm select,
+    #caseForm textarea {
+      width: 100%;
+      padding: 6px 8px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.25);
+      background: #202020;
+      color: #f5f5f5;
+      box-sizing: border-box;
+    }
+
+    #caseForm textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    #caseForm .buttons {
+      display: flex;
+      gap: 8px;
+      justify-content: flex-end;
+      margin-top: 4px;
+    }
+
+    #caseList .case-card {
+      border-radius: 10px;
+      background: #151515;
+      border: 1px solid rgba(255,255,255,0.2);
+      margin-bottom: 10px;
+      overflow: hidden;
+    }
+
+    .case-header {
+      padding: 8px 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      background: #1b1b1b;
+    }
+
+    .case-header:hover {
+      background: #242424;
+    }
+
+    .case-title {
+      font-weight: 600;
+      color: #ff3b3b;
+    }
+
+    .case-meta {
+      font-size: 0.8rem;
+      color: #cccccc;
+      margin-left: 8px;
+    }
+
+    .case-body {
+      display: none;
+      padding: 8px 10px 10px;
+      font-size: 0.9rem;
+    }
+
+    .case-body img {
+      max-width: 100%;
+      border-radius: 8px;
+      margin-top: 8px;
+      display: block;
+    }
+
+    .no-cases {
+      font-size: 0.9rem;
+      color: #bbbbbb;
+      font-style: italic;
+      margin-top: 4px;
+    }
+
+    @media (max-width: 600px) {
+      header h1 { font-size: 1.1rem; }
+      .controls { flex-direction: column; align-items: stretch; }
+      .controls input, .controls select, .controls button { width: 100%; }
     }
   </style>
 </head>
 <body>
-  <header><h1>True Crime Atlas</h1></header>
+  <header>
+    <h1 id="countryTitle">Loading…</h1>
+    <button onclick="window.location.href='index.html'">← Back to Globe</button>
+  </header>
 
-  <div id="globeViz"></div>
+  <main>
+    <section class="controls">
+      <input type="text" id="searchInput" placeholder="Search by title or year" />
+      <select id="typeFilter">
+        <option value="all">All crime types</option>
+        <option value="murder">Murder</option>
+        <option value="theft">Theft</option>
+        <option value="kidnapping">Kidnapping</option>
+        <option value="heist">Heist</option>
+        <option value="unsolved">Unsolved</option>
+        <option value="other">Other</option>
+      </select>
+      <select id="yearFilter">
+        <option value="all">All years</option>
+      </select>
+      <button id="addCaseBtn">+ Add Case</button>
+      <button id="exportBtn">Export Cases</button>
+    </section>
 
-  <!-- Left menu -->
-  <div class="left-menu" id="leftMenu">
-    <div class="group-title">Regions</div>
-    <button class="continent-btn" data-lat="54.5260" data-lng="15.2551" data-alt="2.2">Europe</button>
-    <button class="continent-btn" data-lat="34.0479" data-lng="100.6197" data-alt="2.2">Asia</button>
-    <button class="continent-btn" data-lat="-8.7832" data-lng="34.5085" data-alt="2.5">Africa</button>
-    <button class="continent-btn" data-lat="20.0" data-lng="-100.0" data-alt="2.3">North America</button>
-    <button class="continent-btn" data-lat="-15.6" data-lng="-60.1" data-alt="2.6">South America</button>
-    <button class="continent-btn" data-lat="-25.0" data-lng="135.0" data-alt="2.8">Oceania</button>
+    <section id="caseForm">
+      <input id="caseTitle" placeholder="Case title" />
+      <input id="caseYear" type="number" placeholder="Year (e.g. 1995)" />
+      <select id="caseType">
+        <option value="murder">Murder</option>
+        <option value="theft">Theft</option>
+        <option value="kidnapping">Kidnapping</option>
+        <option value="heist">Heist</option>
+        <option value="unsolved">Unsolved</option>
+        <option value="other">Other</option>
+      </select>
+      <input id="caseImage" placeholder="Image URL (optional)" />
+      <textarea id="caseText" placeholder="Case description (factual & short)"></textarea>
+      <div class="buttons">
+        <button id="cancelCaseBtn" type="button">Cancel</button>
+        <button id="saveCaseBtn" type="button">Save</button>
+      </div>
+    </section>
 
-    <div style="height:6px"></div>
-    <div class="group-title">Actions</div>
-    <button id="randomBtn">Random Country</button>
-    <button id="heatmapToggleBtn">Heatmap: ON</button>
-  </div>
-
-  <!-- Mode switch -->
-  <div class="mode-switch" id="modeSwitch">
-    <button class="mode-btn active" data-mode="normal">Normal</button>
-    <button class="mode-btn" data-mode="dark">Dark</button>
-    <button class="mode-btn" data-mode="white">White</button>
-  </div>
-
-  <footer>© 2025 True Crime Atlas | Educational Project</footer>
+    <section id="caseList"></section>
+  </main>
 
   <script>
-    // Globe instance
-    const globe = Globe()(document.getElementById('globeViz'))
-      .globeImageUrl('https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg')
-      .bumpImageUrl('//unpkg.com/three-globe/example/img/earth-topology.png')
-      .backgroundColor('#0b0b0b')
-      .showAtmosphere(true)
-      .atmosphereColor('#ff3b3b')
-      .atmosphereAltitude(0.12)
-      .polygonsTransitionDuration(200);
+    const params = new URLSearchParams(window.location.search);
+    const country = params.get('country') || 'Unknown country';
 
-    const controls = globe.controls();
-    controls.autoRotate = true;
-    controls.autoRotateSpeed = 0.6;
+    const titleEl = document.getElementById('countryTitle');
+    titleEl.textContent = country;
 
-    const renderer = globe.renderer();
-    renderer.toneMappingExposure = 1.35;
+    const searchInput = document.getElementById('searchInput');
+    const typeFilter = document.getElementById('typeFilter');
+    const yearFilter = document.getElementById('yearFilter');
+    const addCaseBtn = document.getElementById('addCaseBtn');
+    const exportBtn = document.getElementById('exportBtn');
+    const formSection = document.getElementById('caseForm');
+    const saveCaseBtn = document.getElementById('saveCaseBtn');
+    const cancelCaseBtn = document.getElementById('cancelCaseBtn');
+    const caseListEl = document.getElementById('caseList');
 
-    // Data for countries + crime index
-    let countriesFeatures = [];
-    let hoveredCountry = null;
-    let heatmapEnabled = true;
-    let crimeCounts = {};
-    let maxCrimeCount = 1;
+    const caseTitleInput = document.getElementById('caseTitle');
+    const caseYearInput = document.getElementById('caseYear');
+    const caseTypeSelect = document.getElementById('caseType');
+    const caseImageInput = document.getElementById('caseImage');
+    const caseTextInput = document.getElementById('caseText');
 
-    function computeCrimeCounts() {
-      crimeCounts = {};
-      countriesFeatures.forEach(f => {
-        const name = f.properties.ADMIN;
-        const stored = JSON.parse(localStorage.getItem('cases_' + name) || '[]');
-        crimeCounts[name] = stored.length || 0;
-      });
-      const values = Object.values(crimeCounts);
-      maxCrimeCount = values.length ? Math.max(1, ...values) : 1;
-    }
+    let cases = [];
 
-    function baseCapColor(feature) {
-      if (!feature) return 'rgba(255,255,255,0.12)';
-      if (!heatmapEnabled) {
-        // neutrales hellgrau, wenn Heatmap aus
-        return 'rgba(255,255,255,0.18)';
-      }
-      const name = feature.properties.ADMIN;
-      const count = crimeCounts[name] || 0;
-      if (count === 0) return 'rgba(255,255,255,0.12)';
-
-      const intensity = Math.min(1, count / maxCrimeCount);
-      const r = 255;
-      const g = Math.round(230 - 120 * intensity);
-      const b = Math.round(230 - 220 * intensity);
-      const a = 0.35 + 0.4 * intensity;
-      return `rgba(${r},${g},${b},${a})`;
-    }
-
-    function updatePolygonColors() {
-      globe.polygonCapColor(f => {
-        if (f === hoveredCountry) {
-          return 'rgba(255,59,59,0.55)';  // Hover-Highlight
-        }
-        return baseCapColor(f);
-      });
-    }
-
-    // Load countries
-    fetch('https://raw.githubusercontent.com/vasturiano/globe.gl/master/example/datasets/ne_110m_admin_0_countries.geojson')
-      .then(r => r.json())
-      .then(data => {
-        countriesFeatures = data.features;
-        computeCrimeCounts();
-
-        globe
-          .polygonsData(countriesFeatures)
-          .polygonCapColor(baseCapColor)
-          .polygonSideColor(() => 'rgba(255,255,255,0.22)')
-          .polygonStrokeColor(() => 'rgba(255,255,255,0.8)')
-          .polygonLabel(d => `${d.properties.ADMIN}\nCases: ${crimeCounts[d.properties.ADMIN] || 0}`)
-          .onPolygonHover(d => {
-            hoveredCountry = d;
-            updatePolygonColors();
-          })
-          .onPolygonClick(d => {
-            const countryName = d.properties.ADMIN;
-            window.location.href = `country.html?country=${encodeURIComponent(countryName)}`;
-          });
-      })
-      .catch(e => console.error('GeoJSON load error', e));
-
-    // Continent buttons
-    document.querySelectorAll('.continent-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const lat = parseFloat(btn.dataset.lat);
-        const lng = parseFloat(btn.dataset.lng);
-        const alt = parseFloat(btn.dataset.alt);
-        globe.pointOfView({ lat, lng, altitude: alt }, 1000);
-      });
-    });
-
-    // Random country
-    document.getElementById('randomBtn').addEventListener('click', () => {
-      if (!countriesFeatures.length) return;
-      const withCases = countriesFeatures.filter(f => {
-        const name = f.properties.ADMIN;
-        return (JSON.parse(localStorage.getItem('cases_' + name) || '[]')).length > 0;
-      });
-      const pool = withCases.length ? withCases : countriesFeatures;
-      const pick = pool[Math.floor(Math.random() * pool.length)];
-      if (!pick) return;
-
-      // simple centroid
-      let lat = 0, lng = 0;
+    function loadCases() {
       try {
-        const coords = pick.geometry.type === 'Polygon'
-          ? pick.geometry.coordinates[0]
-          : pick.geometry.type === 'MultiPolygon'
-            ? pick.geometry.coordinates[0][0]
-            : null;
-        if (coords && coords.length) {
-          let sumLat = 0, sumLng = 0;
-          coords.forEach(c => { sumLng += c[0]; sumLat += c[1]; });
-          lat = sumLat / coords.length;
-          lng = sumLng / coords.length;
+        cases = JSON.parse(localStorage.getItem('cases_' + country) || '[]');
+      } catch {
+        cases = [];
+      }
+    }
+
+    function saveCases() {
+      localStorage.setItem('cases_' + country, JSON.stringify(cases));
+    }
+
+    function updateYearFilterOptions() {
+      const years = Array.from(new Set(cases.map(c => c.year).filter(Boolean))).sort();
+      yearFilter.innerHTML = '<option value="all">All years</option>';
+      years.forEach(y => {
+        const opt = document.createElement('option');
+        opt.value = y;
+        opt.textContent = y;
+        yearFilter.appendChild(opt);
+      });
+    }
+
+    function renderCases() {
+      const search = searchInput.value.trim().toLowerCase();
+      const typeVal = typeFilter.value;
+      const yearVal = yearFilter.value;
+
+      caseListEl.innerHTML = '';
+
+      let filtered = cases.slice();
+
+      filtered = filtered.filter(c => {
+        let ok = true;
+        if (typeVal !== 'all' && c.type !== typeVal) ok = false;
+        if (yearVal !== 'all' && String(c.year) !== yearVal) ok = false;
+        if (search) {
+          const hay = (c.title + ' ' + (c.year || '')).toLowerCase();
+          if (!hay.includes(search)) ok = false;
         }
-      } catch(e){}
+        return ok;
+      });
 
-      globe.pointOfView({ lat, lng, altitude: 1.8 }, 1000);
-      setTimeout(() => {
-        window.location.href = `country.html?country=${encodeURIComponent(pick.properties.ADMIN)}`;
-      }, 1200);
-    });
-
-    // Heatmap toggle
-    const heatmapBtn = document.getElementById('heatmapToggleBtn');
-    heatmapBtn.addEventListener('click', () => {
-      heatmapEnabled = !heatmapEnabled;
-      heatmapBtn.textContent = `Heatmap: ${heatmapEnabled ? 'ON' : 'OFF'}`;
-      updatePolygonColors();
-    });
-
-    // Mode switch
-    const modeButtons = document.querySelectorAll('.mode-btn');
-    function applyCanvasFilterForMode(mode) {
-      const canvas = document.querySelector('#globeViz canvas');
-      if (!canvas) return;
-      if (mode === 'white') {
-        canvas.style.filter = 'grayscale(0) contrast(1.02) brightness(1.05) saturate(0.8)';
-      } else {
-        canvas.style.filter = 'grayscale(1) contrast(1.05) brightness(0.98)';
+      if (!filtered.length) {
+        const p = document.createElement('p');
+        p.className = 'no-cases';
+        p.textContent = 'No cases yet. Add one with "+ Add Case".';
+        caseListEl.appendChild(p);
+        return;
       }
+
+      filtered.forEach((c, index) => {
+        const card = document.createElement('div');
+        card.className = 'case-card';
+
+        const header = document.createElement('div');
+        header.className = 'case-header';
+
+        const leftBox = document.createElement('div');
+        const titleSpan = document.createElement('span');
+        titleSpan.className = 'case-title';
+        titleSpan.textContent = c.title || 'Untitled case';
+
+        const metaSpan = document.createElement('span');
+        metaSpan.className = 'case-meta';
+        const yearText = c.year ? c.year : 'Year n/a';
+        const typeText = c.type ? c.type : 'type n/a';
+        metaSpan.textContent = `(${yearText} · ${typeText})`;
+
+        leftBox.appendChild(titleSpan);
+        leftBox.appendChild(metaSpan);
+
+        header.appendChild(leftBox);
+
+        const body = document.createElement('div');
+        body.className = 'case-body';
+        body.innerHTML = `<p>${(c.text || '').replace(/\n/g, '<br>')}</p>`;
+
+        if (c.imageUrl) {
+          const img = document.createElement('img');
+          img.src = c.imageUrl;
+          img.alt = c.title || 'Case image';
+          body.appendChild(img);
+        }
+
+        header.addEventListener('click', () => {
+          body.style.display = body.style.display === 'block' ? 'none' : 'block';
+        });
+
+        card.appendChild(header);
+        card.appendChild(body);
+        caseListEl.appendChild(card);
+      });
     }
 
-    function setMode(mode) {
-      modeButtons.forEach(b => b.classList.toggle('active', b.dataset.mode === mode));
-      const viz = document.getElementById('globeViz');
-
-      if (mode === 'normal') {
-        document.body.style.background = 'var(--bg-normal)';
-        document.body.style.color = 'var(--text-normal)';
-        viz.style.background = 'var(--bg-normal)';
-        applyCanvasFilterForMode('normal');
-      } else if (mode === 'dark') {
-        document.body.style.background = 'var(--bg-dark)';
-        document.body.style.color = 'var(--text-dark)';
-        viz.style.background = 'var(--bg-dark)';
-        applyCanvasFilterForMode('dark');
-      } else if (mode === 'white') {
-        document.body.style.background = 'var(--bg-white)';
-        document.body.style.color = 'var(--text-white)';
-        viz.style.background = 'var(--bg-white)';
-        applyCanvasFilterForMode('white');
-      }
+    function openForm() {
+      formSection.style.display = 'flex';
     }
 
-    modeButtons.forEach(b => b.addEventListener('click', () => setMode(b.dataset.mode)));
-    setMode('normal');
+    function closeForm() {
+      formSection.style.display = 'none';
+      caseTitleInput.value = '';
+      caseYearInput.value = '';
+      caseTypeSelect.value = 'murder';
+      caseImageInput.value = '';
+      caseTextInput.value = '';
+    }
 
-    // Re-apply filter when canvas appears
-    const observer = new MutationObserver(() => {
-      const active = document.querySelector('.mode-btn.active');
-      if (active) applyCanvasFilterForMode(active.dataset.mode);
+    addCaseBtn.addEventListener('click', openForm);
+    cancelCaseBtn.addEventListener('click', closeForm);
+
+    saveCaseBtn.addEventListener('click', () => {
+      const title = caseTitleInput.value.trim();
+      const year = caseYearInput.value ? String(caseYearInput.value) : '';
+      const type = caseTypeSelect.value;
+      const img = caseImageInput.value.trim();
+      const text = caseTextInput.value.trim();
+
+      if (!title || !text) {
+        alert('Please enter at least a title and description.');
+        return;
+      }
+
+      const newCase = {
+        title,
+        year,
+        type,
+        imageUrl: img || '',
+        text
+      };
+
+      cases.push(newCase);
+      saveCases();
+      updateYearFilterOptions();
+      renderCases();
+      closeForm();
     });
-    observer.observe(document.getElementById('globeViz'), { childList:true });
 
-    // Wenn localStorage sich ändert (z.B. neue Fälle): Seite neu laden -> Heatmap aktualisiert
-    window.addEventListener('storage', () => location.reload());
+    // Filter events
+    searchInput.addEventListener('input', renderCases);
+    typeFilter.addEventListener('change', renderCases);
+    yearFilter.addEventListener('change', renderCases);
+
+    // Export cases as JSON file
+    exportBtn.addEventListener('click', () => {
+      const dataStr = JSON.stringify(cases, null, 2);
+      const blob = new Blob([dataStr], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `true-crime-${country.replace(/\s+/g, '_')}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    });
+
+    // Init
+    loadCases();
+    updateYearFilterOptions();
+    renderCases();
   </script>
 </body>
 </html>
+
