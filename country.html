@@ -257,40 +257,7 @@
     const countryTitle = document.getElementById('countryTitle');
     countryTitle.textContent = country;
 
-    // ---------- Region/State Mapping ----------
-    const REGION_MAP = {
-      "United States": ["All regions", "California", "Texas", "New York", "Florida", "Washington", "Other"],
-      "USA": ["All regions", "California", "Texas", "New York", "Florida", "Washington", "Other"],
-      "Germany": ["All regions", "Bavaria", "Berlin", "Hamburg", "North Rhine-Westphalia", "Saxony", "Other"],
-      "Brazil": ["All regions", "São Paulo", "Rio de Janeiro", "Bahia", "Amazonas", "Other"],
-      "Japan": ["All regions", "Tokyo", "Osaka", "Kyoto", "Hokkaido", "Fukuoka", "Other"],
-      "United Kingdom": ["All regions", "England", "Scotland", "Wales", "Northern Ireland", "Other"]
-    };
-
-    const defaultRegions = ["All regions", "Region 1", "Region 2", "Region 3", "Other"];
-
-    function getRegionsForCountry(name){
-      return REGION_MAP[name] || defaultRegions;
-    }
-
-    const regionOptions = getRegionsForCountry(country);
-
-    const filterRegionSelect = document.getElementById('filterRegion');
-    const caseRegionSelect = document.getElementById('caseRegion');
-
-    function fillRegionSelect(selectEl, regions, includeAll){
-      selectEl.innerHTML = "";
-      regions.forEach((r, idx) => {
-        const opt = document.createElement('option');
-        opt.value = (includeAll && idx === 0) ? "" : r;
-        opt.textContent = r;
-        selectEl.appendChild(opt);
-      });
-    }
-    // Filter: erste Option = All regions -> value = ""
-    fillRegionSelect(filterRegionSelect, regionOptions, true);
-    // Case-Form: All regions wird als echte Auswahl mit Wert übernommen
-    fillRegionSelect(caseRegionSelect, regionOptions, false);
+    
 
     // ---------- Cases aus localStorage ----------
     const STORAGE_KEY = "cases_" + country;
@@ -307,12 +274,10 @@
 
     function matchesFilters(c){
       const typeVal = filterType.value;
-      const regionVal = filterRegionSelect.value;
       const yearVal = filterYear.value.trim();
       const q = searchInput.value.trim().toLowerCase();
 
       if(typeVal && c.type !== typeVal) return false;
-      if(regionVal && c.region !== regionVal) return false;
       if(yearVal && String(c.year || "").toString() !== yearVal) return false;
 
       if(q){
