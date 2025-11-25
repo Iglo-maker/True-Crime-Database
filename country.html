@@ -315,7 +315,6 @@
         const parts = [];
         if(c.year) parts.push(c.year);
         if(c.type) parts.push(c.type);
-        if(c.region) parts.push(c.region);
         metaEl.textContent = parts.join(' • ');
 
         left.appendChild(titleEl);
@@ -368,7 +367,6 @@
       const title = document.getElementById('caseTitle').value.trim();
       const text = document.getElementById('caseText').value.trim();
       const type = document.getElementById('caseType').value;
-      const region = document.getElementById('caseRegion').value;
       const year = document.getElementById('caseYear').value.trim();
       const imageUrl = document.getElementById('caseImageUrl').value.trim();
 
@@ -381,7 +379,6 @@
         title,
         text,
         type,
-        region,
         year: year ? parseInt(year) : null,
         imageUrl: imageUrl || null,
         createdAt: Date.now()
@@ -394,7 +391,6 @@
       document.getElementById('caseTitle').value = "";
       document.getElementById('caseText').value = "";
       document.getElementById('caseType').value = "";
-      document.getElementById('caseRegion').value = regionOptions[0] || "";
       document.getElementById('caseYear').value = "";
       document.getElementById('caseImageUrl').value = "";
 
@@ -410,7 +406,6 @@
 
     document.getElementById('clearFiltersBtn').addEventListener('click', () => {
       filterType.value = "";
-      filterRegionSelect.value = "";
       filterYear.value = "";
       searchInput.value = "";
       renderCases();
