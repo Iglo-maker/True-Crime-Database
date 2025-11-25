@@ -13,147 +13,122 @@
     :root{
       --bg-normal: #0b0b0b;
       --bg-dark: #050505;
-      --bg-white: #f6f6f6;
+      --bg-white: #ffffff;
       --text-normal: #f5f5f5;
+      --text-dark: #f5f5f5;
       --text-white: #111111;
       --accent: #ff3b3b;
     }
 
-    html, body {
-      height: 100%;
-      margin: 0;
-      font-family: "Poppins", sans-serif;
-      overflow: hidden;
+    html,body{
+      height:100%;
+      margin:0;
+      font-family: "Poppins",sans-serif;
+      overflow:hidden;
       background: var(--bg-normal);
       color: var(--text-normal);
     }
 
-    #globeViz {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
+    #globeViz{
+      position:absolute;
+      inset:0;
+      width:100%;
+      height:100%;
       background: var(--bg-normal);
     }
 
-    header {
-      position: absolute;
-      top: 18px;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 20;
-      text-align: center;
-      pointer-events: none;
+    header{
+      position:absolute;
+      top:18px;
+      left:50%;
+      transform:translateX(-50%);
+      z-index:12;
+      pointer-events:none;
+      text-align:center;
+    }
+    header h1{
+      margin:0;
+      color:var(--accent);
+      text-shadow:0 0 8px rgba(255,59,59,0.18);
+      letter-spacing:1.5px;
+      font-size:2rem;
+      pointer-events:auto;
     }
 
-    header h1 {
-      margin: 0;
-      pointer-events: auto;
-      color: var(--accent);
-      font-size: 2.2rem;
-      letter-spacing: 2px;
-      text-shadow: 0 0 10px rgba(255,59,59,0.4);
-    }
-
-    /* Linkes Menü (Kontinente + Random) */
-    .left-menu {
-      position: absolute;
-      left: 14px;
-      top: 80px;
-      z-index: 15;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
+    .left-menu{
+      position:absolute;
+      left:14px;
+      top:80px;
+      z-index:14;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
       background: rgba(18,18,18,0.7);
-      border-radius: 10px;
-      padding: 10px;
-      border: 1px solid rgba(255,255,255,0.08);
+      padding:10px;
+      border-radius:10px;
+      border:1px solid rgba(255,255,255,0.08);
       backdrop-filter: blur(6px);
     }
-
-    .left-menu .group-title {
-      font-size: 0.8rem;
-      color: #bdbdbd;
-      margin-bottom: 2px;
+    .left-menu .group-title{
+      color:#bdbdbd;
+      font-size:0.8rem;
+      padding:4px 6px;
+    }
+    .left-menu button{
+      background:transparent;
+      color:#f5f5f5;
+      border:1px solid rgba(255,255,255,0.18);
+      padding:8px 10px;
+      border-radius:8px;
+      cursor:pointer;
+      min-width:120px;
+      text-align:left;
+      font-size:0.9rem;
+    }
+    .left-menu button:hover{
+      background:rgba(255,255,255,0.06);
     }
 
-    .left-menu button {
-      background: transparent;
-      border-radius: 8px;
-      border: 1px solid rgba(255,255,255,0.15);
-      padding: 6px 10px;
-      color: var(--text-normal);
-      font-size: 0.85rem;
-      text-align: left;
-      cursor: pointer;
-    }
-
-    .left-menu button:hover {
-      border-color: var(--accent);
-    }
-
-    /* Mode-Switch + Rotation unten links */
-    .bottom-left-panel {
-      position: absolute;
-      left: 14px;
-      bottom: 14px;
-      z-index: 15;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .mode-switch,
-    .rotate-box {
-      display: flex;
-      gap: 6px;
-      align-items: center;
+    .mode-switch{
+      position:absolute;
+      left:14px;
+      bottom:14px;
+      z-index:14;
+      display:flex;
+      gap:8px;
+      align-items:center;
       background: rgba(18,18,18,0.7);
-      padding: 8px;
-      border-radius: 10px;
-      border: 1px solid rgba(255,255,255,0.08);
-      backdrop-filter: blur(6px);
+      padding:8px;
+      border-radius:10px;
+      border:1px solid rgba(255,255,255,0.08);
+    }
+    .mode-switch button{
+      padding:6px 8px;
+      border-radius:8px;
+      border:none;
+      cursor:pointer;
+      background:transparent;
+      color:#f5f5f5;
+      font-size:0.85rem;
+    }
+    .mode-switch button.active{
+      background:var(--accent);
+      color:#ffffff;
+      box-shadow:0 6px 18px rgba(255,59,59,0.25);
     }
 
-    .mode-switch button,
-    .rotate-box button {
-      border-radius: 8px;
-      border: none;
-      background: transparent;
-      color: var(--text-normal);
-      padding: 6px 8px;
-      font-size: 0.85rem;
-      cursor: pointer;
+    footer{
+      position:absolute;
+      bottom:10px;
+      right:10px;
+      z-index:12;
+      color:#9a9a9a;
+      font-size:0.8rem;
     }
 
-    .mode-switch button.active {
-      background: var(--accent);
-      color: #fff;
-      box-shadow: 0 4px 14px rgba(255,59,59,0.3);
-    }
-
-    .rotate-box button.active {
-      background: var(--accent);
-      color: #fff;
-      box-shadow: 0 4px 14px rgba(255,59,59,0.3);
-    }
-
-    footer {
-      position: absolute;
-      bottom: 10px;
-      right: 10px;
-      z-index: 12;
-      font-size: 0.8rem;
-      color: #999;
-    }
-
-    @media (max-width: 700px) {
-      header h1 {
-        font-size: 1.4rem;
-      }
-      .left-menu button {
-        min-width: 90px;
-      }
+    @media (max-width:700px){
+      header h1{ font-size:1.3rem; }
+      .left-menu button{ min-width:90px; font-size:0.8rem; }
     }
   </style>
 </head>
@@ -162,8 +137,8 @@
 
   <div id="globeViz"></div>
 
-  <!-- Linkes Menü -->
-  <div class="left-menu">
+  <!-- Left menu -->
+  <div class="left-menu" id="leftMenu">
     <div class="group-title">Regions</div>
     <button class="continent-btn" data-lat="54.5260" data-lng="15.2551" data-alt="2.2">Europe</button>
     <button class="continent-btn" data-lat="34.0479" data-lng="100.6197" data-alt="2.2">Asia</button>
@@ -171,34 +146,26 @@
     <button class="continent-btn" data-lat="20.0" data-lng="-100.0" data-alt="2.3">North America</button>
     <button class="continent-btn" data-lat="-15.6" data-lng="-60.1" data-alt="2.6">South America</button>
     <button class="continent-btn" data-lat="-25.0" data-lng="135.0" data-alt="2.8">Oceania</button>
-    <button class="continent-btn" data-lat="-82.0" data-lng="0.0" data-alt="2.8">Antarctica</button>
 
-    <div style="height:6px;"></div>
+    <div style="height:6px"></div>
     <div class="group-title">Actions</div>
     <button id="randomBtn">Random Country</button>
+    <button id="heatmapToggleBtn">Heatmap: ON</button>
   </div>
 
-  <!-- unten links: Modes + Rotation -->
-  <div class="bottom-left-panel">
-    <div class="mode-switch" id="modeSwitch">
-      <button class="mode-btn active" data-mode="normal">Normal</button>
-      <button class="mode-btn" data-mode="dark">Dark</button>
-      <button class="mode-btn" data-mode="white">White</button>
-    </div>
-    <div class="rotate-box">
-      <span style="font-size:0.8rem;">Rotation</span>
-      <button id="rotateToggle" class="active">Stop</button>
-    </div>
+  <!-- Mode switch -->
+  <div class="mode-switch" id="modeSwitch">
+    <button class="mode-btn active" data-mode="normal">Normal</button>
+    <button class="mode-btn" data-mode="dark">Dark</button>
+    <button class="mode-btn" data-mode="white">White</button>
   </div>
 
   <footer>© 2025 True Crime Atlas | Educational Project</footer>
 
   <script>
-    // ---------- Globe Setup ----------
-    const globeElem = document.getElementById('globeViz');
-
-    const globe = Globe()(globeElem)
-      .globeImageUrl('https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg') // bunter Globus
+    // Globe instance
+    const globe = Globe()(document.getElementById('globeViz'))
+      .globeImageUrl('https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg')
       .bumpImageUrl('//unpkg.com/three-globe/example/img/earth-topology.png')
       .backgroundColor('#0b0b0b')
       .showAtmosphere(true)
@@ -208,25 +175,19 @@
 
     const controls = globe.controls();
     controls.autoRotate = true;
-    controls.autoRotateSpeed = 0.7;
-    let rotationActive = true;
+    controls.autoRotateSpeed = 0.6;
 
-    // Rotation-Button
-    const rotateBtn = document.getElementById('rotateToggle');
-    rotateBtn.addEventListener('click', () => {
-      rotationActive = !rotationActive;
-      controls.autoRotate = rotationActive;
-      rotateBtn.classList.toggle('active', rotationActive);
-      rotateBtn.textContent = rotationActive ? 'Stop' : 'Start';
-    });
+    const renderer = globe.renderer();
+    renderer.toneMappingExposure = 1.35;
 
-    // ---------- Länder + Heatmap ----------
+    // Data for countries + crime index
     let countriesFeatures = [];
     let hoveredCountry = null;
+    let heatmapEnabled = true;
     let crimeCounts = {};
-    let maxCrime = 1;
+    let maxCrimeCount = 1;
 
-    function loadCrimeCounts() {
+    function computeCrimeCounts() {
       crimeCounts = {};
       countriesFeatures.forEach(f => {
         const name = f.properties.ADMIN;
@@ -234,58 +195,61 @@
         crimeCounts[name] = stored.length || 0;
       });
       const values = Object.values(crimeCounts);
-      maxCrime = values.length ? Math.max(1, ...values) : 1;
+      maxCrimeCount = values.length ? Math.max(1, ...values) : 1;
     }
 
-    function baseColor(d) {
-      const name = d.properties.ADMIN;
-      const count = crimeCounts[name] || 0;
-      if (count === 0) {
-        return 'rgba(255,255,255,0.15)'; // neutrales hellgrau
+    function baseCapColor(feature) {
+      if (!feature) return 'rgba(255,255,255,0.12)';
+      if (!heatmapEnabled) {
+        // neutrales hellgrau, wenn Heatmap aus
+        return 'rgba(255,255,255,0.18)';
       }
-      const intensity = Math.min(1, count / maxCrime);
+      const name = feature.properties.ADMIN;
+      const count = crimeCounts[name] || 0;
+      if (count === 0) return 'rgba(255,255,255,0.12)';
+
+      const intensity = Math.min(1, count / maxCrimeCount);
       const r = 255;
-      const g = Math.round(230 - 130 * intensity);
+      const g = Math.round(230 - 120 * intensity);
       const b = Math.round(230 - 220 * intensity);
       const a = 0.35 + 0.4 * intensity;
       return `rgba(${r},${g},${b},${a})`;
     }
 
+    function updatePolygonColors() {
+      globe.polygonCapColor(f => {
+        if (f === hoveredCountry) {
+          return 'rgba(255,59,59,0.55)';  // Hover-Highlight
+        }
+        return baseCapColor(f);
+      });
+    }
+
+    // Load countries
     fetch('https://raw.githubusercontent.com/vasturiano/globe.gl/master/example/datasets/ne_110m_admin_0_countries.geojson')
-      .then(res => res.json())
+      .then(r => r.json())
       .then(data => {
         countriesFeatures = data.features;
-        loadCrimeCounts();
+        computeCrimeCounts();
 
         globe
           .polygonsData(countriesFeatures)
-          .polygonCapColor(d =>
-            d === hoveredCountry
-              ? 'rgba(255,59,59,0.7)'               // Hover: rot
-              : baseColor(d)                        // sonst Heatmap-Farbe
-          )
-          .polygonSideColor(() => 'rgba(255,255,255,0.25)')
-          .polygonStrokeColor(() => 'rgba(255,255,255,0.85)')
-          .polygonAltitude(d =>
-            d === hoveredCountry ? 0.08 : 0.01      // Hover: 3D höher
-          )
-          .polygonLabel(d => {
-            const name = d.properties.ADMIN;
-            const count = crimeCounts[name] || 0;
-            return `${name}\nCases: ${count}`;
-          })
+          .polygonCapColor(baseCapColor)
+          .polygonSideColor(() => 'rgba(255,255,255,0.22)')
+          .polygonStrokeColor(() => 'rgba(255,255,255,0.8)')
+          .polygonLabel(d => `${d.properties.ADMIN}\nCases: ${crimeCounts[d.properties.ADMIN] || 0}`)
           .onPolygonHover(d => {
-            hoveredCountry = d || null;
-            // Refresh, damit CapColor/Altitude neu berechnet werden
-            globe.polygonsData(countriesFeatures);
+            hoveredCountry = d;
+            updatePolygonColors();
           })
           .onPolygonClick(d => {
             const countryName = d.properties.ADMIN;
             window.location.href = `country.html?country=${encodeURIComponent(countryName)}`;
           });
-      });
+      })
+      .catch(e => console.error('GeoJSON load error', e));
 
-    // ---------- Kontinent Buttons ----------
+    // Continent buttons
     document.querySelectorAll('.continent-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         const lat = parseFloat(btn.dataset.lat);
@@ -295,25 +259,25 @@
       });
     });
 
-    // ---------- Random Country ----------
+    // Random country
     document.getElementById('randomBtn').addEventListener('click', () => {
       if (!countriesFeatures.length) return;
       const withCases = countriesFeatures.filter(f => {
         const name = f.properties.ADMIN;
-        const c = JSON.parse(localStorage.getItem('cases_' + name) || '[]');
-        return c.length > 0;
+        return (JSON.parse(localStorage.getItem('cases_' + name) || '[]')).length > 0;
       });
       const pool = withCases.length ? withCases : countriesFeatures;
       const pick = pool[Math.floor(Math.random() * pool.length)];
       if (!pick) return;
 
-      // grobe Mitte des Landes berechnen
+      // simple centroid
       let lat = 0, lng = 0;
       try {
-        const geom = pick.geometry;
-        let coords = null;
-        if (geom.type === 'Polygon') coords = geom.coordinates[0];
-        if (geom.type === 'MultiPolygon') coords = geom.coordinates[0][0];
+        const coords = pick.geometry.type === 'Polygon'
+          ? pick.geometry.coordinates[0]
+          : pick.geometry.type === 'MultiPolygon'
+            ? pick.geometry.coordinates[0][0]
+            : null;
         if (coords && coords.length) {
           let sumLat = 0, sumLng = 0;
           coords.forEach(c => { sumLng += c[0]; sumLat += c[1]; });
@@ -328,48 +292,60 @@
       }, 1200);
     });
 
-    // ---------- Mode Switch ----------
-    const modeButtons = document.querySelectorAll('.mode-btn');
+    // Heatmap toggle
+    const heatmapBtn = document.getElementById('heatmapToggleBtn');
+    heatmapBtn.addEventListener('click', () => {
+      heatmapEnabled = !heatmapEnabled;
+      heatmapBtn.textContent = `Heatmap: ${heatmapEnabled ? 'ON' : 'OFF'}`;
+      updatePolygonColors();
+    });
 
-    function applyCanvasFilter(filter) {
-      const canvas = globeElem.querySelector('canvas');
-      if (canvas) canvas.style.filter = filter;
+    // Mode switch
+    const modeButtons = document.querySelectorAll('.mode-btn');
+    function applyCanvasFilterForMode(mode) {
+      const canvas = document.querySelector('#globeViz canvas');
+      if (!canvas) return;
+      if (mode === 'white') {
+        canvas.style.filter = 'grayscale(0) contrast(1.02) brightness(1.05) saturate(0.8)';
+      } else {
+        canvas.style.filter = 'grayscale(1) contrast(1.05) brightness(0.98)';
+      }
     }
 
     function setMode(mode) {
       modeButtons.forEach(b => b.classList.toggle('active', b.dataset.mode === mode));
+      const viz = document.getElementById('globeViz');
 
       if (mode === 'normal') {
         document.body.style.background = 'var(--bg-normal)';
-        globeElem.style.background = 'var(--bg-normal)';
-        applyCanvasFilter('none');  // bunter Globus
+        document.body.style.color = 'var(--text-normal)';
+        viz.style.background = 'var(--bg-normal)';
+        applyCanvasFilterForMode('normal');
       } else if (mode === 'dark') {
         document.body.style.background = 'var(--bg-dark)';
-        globeElem.style.background = 'var(--bg-dark)';
-        applyCanvasFilter('grayscale(1) contrast(1.05) brightness(0.9)');
+        document.body.style.color = 'var(--text-dark)';
+        viz.style.background = 'var(--bg-dark)';
+        applyCanvasFilterForMode('dark');
       } else if (mode === 'white') {
         document.body.style.background = 'var(--bg-white)';
-        globeElem.style.background = 'var(--bg-white)';
-        applyCanvasFilter('grayscale(0.1) contrast(1.05) brightness(1.05) saturate(0.6)');
+        document.body.style.color = 'var(--text-white)';
+        viz.style.background = 'var(--bg-white)';
+        applyCanvasFilterForMode('white');
       }
     }
 
-    modeButtons.forEach(btn => {
-      btn.addEventListener('click', () => setMode(btn.dataset.mode));
-    });
-
-    // Canvas kann etwas später geladen werden → Observer
-    const observer = new MutationObserver(() => {
-      const active = document.querySelector('.mode-btn.active');
-      if (active) setMode(active.dataset.mode);
-    });
-    observer.observe(globeElem, { childList: true });
-
-    // Standardmodus
+    modeButtons.forEach(b => b.addEventListener('click', () => setMode(b.dataset.mode)));
     setMode('normal');
 
-    // Wenn in country.html Fälle hinzugefügt wurden und Tab wieder geladen wird,
-    // aktualisiert ein Reload die Heatmap (oder du drückst einfach F5).
+    // Re-apply filter when canvas appears
+    const observer = new MutationObserver(() => {
+      const active = document.querySelector('.mode-btn.active');
+      if (active) applyCanvasFilterForMode(active.dataset.mode);
+    });
+    observer.observe(document.getElementById('globeViz'), { childList:true });
+
+    // Wenn localStorage sich ändert (z.B. neue Fälle): Seite neu laden -> Heatmap aktualisiert
+    window.addEventListener('storage', () => location.reload());
   </script>
 </body>
 </html>
