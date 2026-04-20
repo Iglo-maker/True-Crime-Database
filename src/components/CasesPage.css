@@ -1,0 +1,88 @@
+.cases-page {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  padding: 60px 24px 24px;
+}
+
+.cases-page__auth {
+  position: absolute;
+  top: 16px;
+  right: 20px;
+  z-index: 50;
+}
+
+.cases-page__auth-btn {
+  background: none;
+  border: 1px solid var(--fg-muted);
+  color: var(--fg-muted);
+  padding: 4px 12px;
+  border-radius: 4px;
+  font-size: 12px;
+  transition: all 0.2s;
+}
+
+.cases-page__auth-btn:hover {
+  border-color: var(--fg);
+  color: var(--fg);
+}
+
+.cases-page__header {
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.cases-page__title {
+  font-size: 20px;
+  font-weight: 400;
+  letter-spacing: 2px;
+  color: var(--fg);
+}
+
+.cases-page__subtitle {
+  font-size: 13px;
+  color: var(--fg-muted);
+  margin-top: 4px;
+  letter-spacing: 1px;
+}
+
+.cases-page__actions {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.cases-page__action-btn {
+  background: none;
+  border: 1px solid var(--fg);
+  color: var(--fg);
+  padding: 8px 20px;
+  font-size: 13px;
+  letter-spacing: 1px;
+  transition: all 0.2s;
+}
+
+.cases-page__action-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.cases-page__action-btn.active {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.cases-page__list {
+  max-width: 700px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.cases-page__empty {
+  text-align: center;
+  color: var(--fg-muted);
+  font-size: 14px;
+  padding: 40px 0;
+}

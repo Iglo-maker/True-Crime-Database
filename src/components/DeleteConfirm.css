@@ -1,0 +1,61 @@
+.delete-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--overlay);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1100;
+  backdrop-filter: blur(4px);
+}
+
+.delete-dialog {
+  background: var(--modal-bg);
+  border: 1px solid var(--danger);
+  border-radius: 8px;
+  padding: 24px;
+  max-width: 360px;
+  text-align: center;
+}
+
+.delete-dialog__text {
+  color: var(--fg);
+  font-size: 14px;
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+
+.delete-dialog__actions {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+}
+
+.delete-dialog__no {
+  background: none;
+  border: 1px solid var(--fg-muted);
+  color: var(--fg-muted);
+  padding: 6px 16px;
+  border-radius: 4px;
+  font-size: 13px;
+  transition: all 0.2s;
+}
+
+.delete-dialog__no:hover {
+  border-color: var(--fg);
+  color: var(--fg);
+}
+
+.delete-dialog__yes {
+  background: var(--danger);
+  border: 1px solid var(--danger);
+  color: #fff;
+  padding: 6px 16px;
+  border-radius: 4px;
+  font-size: 13px;
+  transition: opacity 0.2s;
+}
+
+.delete-dialog__yes:hover {
+  opacity: 0.85;
+}

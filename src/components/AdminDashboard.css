@@ -1,0 +1,161 @@
+.admin {
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  padding: 60px 24px 24px;
+}
+
+.admin__title {
+  text-align: center;
+  font-size: 22px;
+  font-weight: 400;
+  letter-spacing: 3px;
+  color: var(--fg);
+  margin-bottom: 32px;
+  text-transform: uppercase;
+}
+
+.admin__loading {
+  text-align: center;
+  color: var(--fg-muted);
+  font-size: 14px;
+}
+
+.admin__section {
+  max-width: 700px;
+  margin: 0 auto 36px;
+}
+
+.admin__section-title {
+  font-size: 13px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--fg-muted);
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.admin__table {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.admin__row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 60px;
+  align-items: center;
+  padding: 10px 14px;
+  background: var(--card-bg);
+  border-radius: 4px;
+}
+
+.admin__row--header {
+  background: none;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--fg-muted);
+  padding: 6px 14px;
+}
+
+.admin__member-name {
+  font-size: 14px;
+  color: var(--fg);
+  font-weight: 500;
+}
+
+.admin__member-time {
+  font-size: 13px;
+  color: var(--fg-muted);
+}
+
+/* Toggle switch */
+.admin__switch {
+  position: relative;
+  display: inline-block;
+  width: 40px;
+  height: 22px;
+}
+
+.admin__switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.admin__slider {
+  position: absolute;
+  cursor: pointer;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 22px;
+  transition: 0.3s;
+}
+
+.admin__slider::before {
+  content: '';
+  position: absolute;
+  height: 16px;
+  width: 16px;
+  left: 3px;
+  bottom: 3px;
+  background: var(--fg-muted);
+  border-radius: 50%;
+  transition: 0.3s;
+}
+
+.admin__switch input:checked + .admin__slider {
+  background: rgba(51, 204, 102, 0.4);
+}
+
+.admin__switch input:checked + .admin__slider::before {
+  transform: translateX(18px);
+  background: var(--success);
+}
+
+/* Activity log */
+.admin__activity {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.admin__empty {
+  color: var(--fg-muted);
+  font-size: 13px;
+  text-align: center;
+  padding: 20px;
+}
+
+.admin__activity-item {
+  font-size: 13px;
+  color: var(--fg-muted);
+  padding: 8px 14px;
+  background: var(--card-bg);
+  border-radius: 4px;
+  line-height: 1.5;
+}
+
+.admin__activity-user {
+  color: var(--fg);
+  font-weight: 500;
+}
+
+.admin__activity-case {
+  color: var(--fg);
+  font-style: italic;
+}
+
+.admin__activity-loc {
+  opacity: 0.5;
+  font-size: 11px;
+}
+
+.admin__activity-time {
+  float: right;
+  font-size: 11px;
+  opacity: 0.5;
+}

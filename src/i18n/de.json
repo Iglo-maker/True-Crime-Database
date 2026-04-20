@@ -1,0 +1,73 @@
+{
+  "splash": {
+    "enter": "Eintreten"
+  },
+  "globe": {
+    "back": "Zurück",
+    "rotation": "Rotation",
+    "sunPosition": "Sonnenstand",
+    "day": "Tag",
+    "night": "Nacht",
+    "invertColors": "Farben tauschen",
+    "speed": "Geschwindigkeit",
+    "controls": "Steuerung"
+  },
+  "country": {
+    "back": "Zurück",
+    "selectState": "Wähle einen Staat/Bundesland",
+    "noStates": "Keine Unterteilungen verfügbar",
+    "showAll": "Alle anzeigen"
+  },
+  "cases": {
+    "back": "Zurück",
+    "add": "Hinzufügen",
+    "edit": "Bearbeiten",
+    "delete": "Löschen",
+    "noCases": "Keine Fälle vorhanden",
+    "title": "Titel",
+    "date": "Datum",
+    "status": "Status",
+    "type": "Art",
+    "description": "Beschreibung",
+    "descriptionHint": "Markdown wird unterstützt. Füge Links und Bild-URLs ein.",
+    "save": "Speichern",
+    "cancel": "Abbrechen",
+    "solved": "Gelöst",
+    "unsolved": "Ungelöst",
+    "confirmDelete": "Bist du sicher, dass du diesen Fall löschen möchtest?",
+    "yes": "Ja, löschen",
+    "no": "Nein, abbrechen",
+    "loginRequired": "Bitte einloggen um Fälle zu verwalten",
+    "casesIn": "Fälle in"
+  },
+  "auth": {
+    "login": "Anmelden",
+    "logout": "Abmelden",
+    "enterCode": "Zugangscode eingeben",
+    "accessCode": "Code",
+    "invalidCode": "Ungültiger Zugangscode",
+    "accountDisabled": "Dieses Konto wurde deaktiviert"
+  },
+  "admin": {
+    "members": "Mitglieder",
+    "name": "Name",
+    "lastOnline": "Zuletzt online",
+    "status": "Status",
+    "recentActivity": "Letzte Änderungen",
+    "noActivity": "Keine Aktivitäten",
+    "added": "hat hinzugefügt",
+    "edited": "hat bearbeitet",
+    "deleted": "hat gelöscht",
+    "justNow": "Gerade eben"
+  },
+  "types": {
+    "Mord": "Mord",
+    "Raub": "Raub",
+    "Überfall": "Überfall",
+    "Sexualdelikt": "Sexualdelikt",
+    "Entführung": "Entführung",
+    "Betrug": "Betrug",
+    "Brandstiftung": "Brandstiftung",
+    "Sonstiges": "Sonstiges"
+  }
+}

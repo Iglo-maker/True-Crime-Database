@@ -1,0 +1,73 @@
+{
+  "splash": {
+    "enter": "Enter"
+  },
+  "globe": {
+    "back": "Back",
+    "rotation": "Rotation",
+    "sunPosition": "Sun Position",
+    "day": "Day",
+    "night": "Night",
+    "invertColors": "Invert Colors",
+    "speed": "Speed",
+    "controls": "Controls"
+  },
+  "country": {
+    "back": "Back",
+    "selectState": "Select a state/province",
+    "noStates": "No subdivisions available",
+    "showAll": "Show all"
+  },
+  "cases": {
+    "back": "Back",
+    "add": "Add",
+    "edit": "Edit",
+    "delete": "Delete",
+    "noCases": "No cases found",
+    "title": "Title",
+    "date": "Date",
+    "status": "Status",
+    "type": "Type",
+    "description": "Description",
+    "descriptionHint": "Markdown supported. Insert links and image URLs.",
+    "save": "Save",
+    "cancel": "Cancel",
+    "solved": "Solved",
+    "unsolved": "Unsolved",
+    "confirmDelete": "Are you sure you want to delete this case?",
+    "yes": "Yes, delete",
+    "no": "No, cancel",
+    "loginRequired": "Please log in to manage cases",
+    "casesIn": "Cases in"
+  },
+  "auth": {
+    "login": "Log in",
+    "logout": "Log out",
+    "enterCode": "Enter access code",
+    "accessCode": "Code",
+    "invalidCode": "Invalid access code",
+    "accountDisabled": "This account has been disabled"
+  },
+  "admin": {
+    "members": "Members",
+    "name": "Name",
+    "lastOnline": "Last online",
+    "status": "Status",
+    "recentActivity": "Recent Activity",
+    "noActivity": "No activity",
+    "added": "added",
+    "edited": "edited",
+    "deleted": "deleted",
+    "justNow": "Just now"
+  },
+  "types": {
+    "Mord": "Murder",
+    "Raub": "Robbery",
+    "Überfall": "Assault",
+    "Sexualdelikt": "Sexual Crime",
+    "Entführung": "Kidnapping",
+    "Betrug": "Fraud",
+    "Brandstiftung": "Arson",
+    "Sonstiges": "Other"
+  }
+}

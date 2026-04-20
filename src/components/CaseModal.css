@@ -1,0 +1,102 @@
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--overlay);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(4px);
+}
+
+.modal {
+  background: var(--modal-bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 28px;
+  width: 90%;
+  max-width: 500px;
+  max-height: 85vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.modal__field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.modal__field label {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  opacity: 0.7;
+  color: var(--fg);
+}
+
+.modal__field input,
+.modal__field select,
+.modal__field textarea {
+  background: transparent;
+  border: 1px solid var(--fg-muted);
+  border-radius: 4px;
+  padding: 8px 10px;
+  color: var(--fg);
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.modal__field input:focus,
+.modal__field select:focus,
+.modal__field textarea:focus {
+  border-color: var(--fg);
+}
+
+.modal__field textarea {
+  resize: vertical;
+  min-height: 100px;
+  font-family: inherit;
+}
+
+.modal__field select option {
+  background: var(--modal-bg);
+  color: var(--fg);
+}
+
+.modal__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.modal__cancel {
+  background: none;
+  border: none;
+  color: var(--fg-muted);
+  font-size: 12px;
+  padding: 8px 12px;
+  transition: color 0.2s;
+}
+
+.modal__cancel:hover {
+  color: var(--fg);
+}
+
+.modal__save {
+  background: none;
+  border: 1px solid var(--fg);
+  color: var(--fg);
+  padding: 8px 20px;
+  border-radius: 4px;
+  font-size: 13px;
+  transition: background 0.2s;
+}
+
+.modal__save:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
