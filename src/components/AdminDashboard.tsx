@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useAuth } from '../contexts/AuthContext';
 import { getAllMembers, setMemberActive, type MemberDoc } from '../firebase/members';
 import { getRecentActivity, type ActivityEntry } from '../firebase/activity';
+import { getSuggestions, type Suggestion } from '../firebase/suggestions';
 import BackArrow from './BackArrow';
 import './AdminDashboard.css';
 
@@ -27,7 +28,9 @@ export default function AdminDashboard() {
 
   const [members, setMembers] = useState<MemberDoc[]>([]);
   const [activity, setActivity] = useState<ActivityEntry[]>([]);
+  const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
   const [loading, setLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState<'members' | 'activity' | 'suggestions'>('members');
 
   useEffect(() => {
     if (!isAdmin) {
@@ -40,9 +43,10 @@ export default function AdminDashboard() {
   async function loadData() {
     setLoading(true);
     try {
-      const [m, a] = await Promise.all([getAllMembers(), getRecentActivity()]);
+      const [m, a, s] = await Promise.all([getAllMembers(), getRecentActivity(), getSuggestions()]);
       setMembers(m);
       setActivity(a);
+      setSuggestions(s);
     } catch {
       // Firestore not configured
     } finally {
@@ -72,12 +76,27 @@ export default function AdminDashboard() {
 
       <h1 className="admin__title">Dashboard</h1>
 
+      <div className="admin__tabs">
+        {(['members', 'activity', 'suggestions'] as const).map((tab) => (
+          <button
+            key={tab}
+            className={`admin__tab ${activeTab === tab ? 'active' : ''}`}
+            onClick={() => setActiveTab(tab)}
+          >
+            {t(`admin.tab_${tab}`)}
+            {tab === 'suggestions' && suggestions.length > 0 && (
+              <span className="admin__tab-badge">{suggestions.length}</span>
+            )}
+          </button>
+        ))}
+      </div>
+
       {loading && <p className="admin__loading">Loading...</p>}
 
       {!loading && (
         <>
           {/* Members table */}
-          <section className="admin__section">
+          <section className="admin__section" style={{ display: activeTab === 'members' ? 'block' : 'none' }}>
             <h2 className="admin__section-title">{t('admin.members')}</h2>
             <div className="admin__table">
               <div className="admin__row admin__row--header">
@@ -107,7 +126,7 @@ export default function AdminDashboard() {
           </section>
 
           {/* Activity log */}
-          <section className="admin__section">
+          <section className="admin__section" style={{ display: activeTab === 'activity' ? 'block' : 'none' }}>
             <h2 className="admin__section-title">{t('admin.recentActivity')}</h2>
             <div className="admin__activity">
               {activity.length === 0 && (
@@ -123,6 +142,24 @@ export default function AdminDashboard() {
                   </span>
                   <span className="admin__activity-time">
                     {timeAgo(a.timestamp, t)}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </section>
+          {/* Suggestions */}
+          <section className="admin__section" style={{ display: activeTab === 'suggestions' ? 'block' : 'none' }}>
+            <h2 className="admin__section-title">{t('admin.tab_suggestions')}</h2>
+            <div className="admin__activity">
+              {suggestions.length === 0 && (
+                <p className="admin__empty">{t('admin.noSuggestions')}</p>
+              )}
+              {suggestions.map((s) => (
+                <div key={s.id} className="admin__activity-item">
+                  <span className="admin__activity-case">"{s.caseTitle}"</span>{' '}
+                  <span className="admin__activity-loc">{s.countryName}</span>
+                  <span className="admin__activity-time">
+                    {timeAgo(s.submittedAt, t)}
                   </span>
                 </div>
               ))}

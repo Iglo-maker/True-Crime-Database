@@ -10,7 +10,8 @@
     "night": "Nacht",
     "invertColors": "Farben tauschen",
     "speed": "Geschwindigkeit",
-    "controls": "Steuerung"
+    "controls": "Steuerung",
+    "heatmap": "Heatmap"
   },
   "country": {
     "back": "Zurück",
@@ -27,6 +28,7 @@
     "searchPlaceholder": "Fall suchen...",
     "noResults": "Keine Übereinstimmungen",
     "results": "Ergebnisse",
+    "filterAll": "Alle",
     "title": "Titel",
     "date": "Datum",
     "status": "Status",
@@ -43,6 +45,25 @@
     "loginRequired": "Bitte einloggen um Fälle zu verwalten",
     "casesIn": "Fälle in"
   },
+  "suggestion": {
+    "btn": "Fall vorschlagen",
+    "title": "Fall vorschlagen",
+    "hint": "Schreibe den Namen des Falles, den du vorschlägst:",
+    "placeholder": "Name des Falles...",
+    "submit": "Absenden",
+    "cancel": "Abbrechen",
+    "sent": "Vorschlag wurde gesendet!",
+    "close": "Schließen"
+  },
+  "stats": {
+    "title": "Statistiken",
+    "total": "Fälle gesamt",
+    "solved": "Gelöst",
+    "unsolved": "Ungelöst",
+    "solvedRatio": "Gelöst / Ungelöst",
+    "byType": "Nach Typ",
+    "topCountries": "Top 10 Länder"
+  },
   "auth": {
     "login": "Anmelden",
     "logout": "Abmelden",
@@ -58,10 +79,14 @@
     "status": "Status",
     "recentActivity": "Letzte Änderungen",
     "noActivity": "Keine Aktivitäten",
+    "noSuggestions": "Keine Vorschläge",
     "added": "hat hinzugefügt",
     "edited": "hat bearbeitet",
     "deleted": "hat gelöscht",
-    "justNow": "Gerade eben"
+    "justNow": "Gerade eben",
+    "tab_members": "Mitglieder",
+    "tab_activity": "Aktivität",
+    "tab_suggestions": "Vorschläge"
   },
   "types": {
     "Mord": "Mord",

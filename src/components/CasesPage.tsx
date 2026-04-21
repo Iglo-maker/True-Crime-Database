@@ -6,6 +6,7 @@ import { useCases } from '../hooks/useCases';
 import { addCase, updateCase, deleteCase } from '../firebase/cases';
 import { logActivity } from '../firebase/activity';
 import type { Case, CaseType } from '../types';
+import { CASE_TYPES } from '../types';
 import BackArrow from './BackArrow';
 import CaseCard from './CaseCard';
 import CaseModal from './CaseModal';
@@ -31,18 +32,29 @@ export default function CasesPage() {
   const [deletingCase, setDeletingCase] = useState<Case | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [showSuggestions, setShowSuggestions] = useState(false);
+  const [filterTypes, setFilterTypes] = useState<CaseType[]>([]);
+  const [filterStatus, setFilterStatus] = useState<'all' | 'solved' | 'unsolved'>('all');
 
   // Live-filtered cases
   const filteredCases = useMemo(() => {
-    if (!searchQuery.trim()) return cases;
-    const q = searchQuery.toLowerCase();
-    return cases.filter(
-      (c) =>
-        c.title.toLowerCase().includes(q) ||
-        c.description?.toLowerCase().includes(q) ||
-        c.stateName?.toLowerCase().includes(q)
-    );
-  }, [cases, searchQuery]);
+    let result = cases;
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase();
+      result = result.filter(
+        (c) =>
+          c.title.toLowerCase().includes(q) ||
+          c.description?.toLowerCase().includes(q) ||
+          c.stateName?.toLowerCase().includes(q)
+      );
+    }
+    if (filterTypes.length > 0) {
+      result = result.filter((c) => filterTypes.includes(c.type));
+    }
+    if (filterStatus !== 'all') {
+      result = result.filter((c) => c.status === filterStatus);
+    }
+    return result;
+  }, [cases, searchQuery, filterTypes, filterStatus]);
 
   // Autocomplete suggestions (by title)
   const suggestions = useMemo(() => {
@@ -152,6 +164,36 @@ export default function CasesPage() {
             ))}
           </div>
         )}
+      </div>
+
+      {/* Filter chips */}
+      <div className="cases-page__filters">
+        <div className="cases-page__filter-row">
+          {(['all', 'solved', 'unsolved'] as const).map((s) => (
+            <button
+              key={s}
+              className={`cases-page__chip ${filterStatus === s ? 'active' : ''} ${s !== 'all' ? `chip--${s}` : ''}`}
+              onClick={() => setFilterStatus(s)}
+            >
+              {s === 'all' ? t('cases.filterAll') : t(`cases.${s}`)}
+            </button>
+          ))}
+        </div>
+        <div className="cases-page__filter-row">
+          {CASE_TYPES.map((type) => (
+            <button
+              key={type}
+              className={`cases-page__chip ${filterTypes.includes(type) ? 'active' : ''}`}
+              onClick={() =>
+                setFilterTypes((prev) =>
+                  prev.includes(type) ? prev.filter((t) => t !== type) : [...prev, type]
+                )
+              }
+            >
+              {type}
+            </button>
+          ))}
+        </div>
       </div>
 
       {/* Action buttons - only shown when logged in */}

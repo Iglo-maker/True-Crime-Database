@@ -5,6 +5,7 @@ import { select } from 'd3-selection';
 import { useStatesGeo, useCountryDetailGeo } from '../hooks/useGeoData';
 import { useTranslation } from 'react-i18next';
 import BackArrow from './BackArrow';
+import SuggestionModal from './SuggestionModal';
 import './CountryPage.css';
 
 /**
@@ -44,6 +45,7 @@ export default function CountryPage() {
   const { t } = useTranslation();
   const svgRef = useRef<SVGSVGElement>(null);
   const [hovered, setHovered] = useState<string | null>(null);
+  const [showSuggestion, setShowSuggestion] = useState(false);
 
   const countryName = (location.state as any)?.countryName || countryCode;
   const { data: statesGeo, loading: statesLoading } = useStatesGeo(countryCode);
@@ -136,6 +138,21 @@ export default function CountryPage() {
       >
         {t('country.showAll')}
       </button>
+
+      <button
+        className="country-page__suggest"
+        onClick={() => setShowSuggestion(true)}
+      >
+        {t('suggestion.btn')}
+      </button>
+
+      {showSuggestion && countryCode && (
+        <SuggestionModal
+          countryCode={countryCode}
+          countryName={countryName}
+          onClose={() => setShowSuggestion(false)}
+        />
+      )}
 
       {hovered && (
         <div className="country-page__state-label">

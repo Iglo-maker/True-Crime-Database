@@ -63,3 +63,13 @@ export async function updateCase(
 export async function deleteCase(id: string): Promise<void> {
   await deleteDoc(doc(db, COLLECTION, id));
 }
+
+export async function getCaseCountsByCountry(): Promise<Record<string, number>> {
+  const snapshot = await getDocs(collection(db, COLLECTION));
+  const counts: Record<string, number> = {};
+  snapshot.docs.forEach((d) => {
+    const cc = d.data().countryCode as string;
+    if (cc) counts[cc] = (counts[cc] || 0) + 1;
+  });
+  return counts;
+}

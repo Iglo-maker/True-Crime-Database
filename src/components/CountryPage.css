@@ -52,6 +52,26 @@
   opacity: 1;
 }
 
+.country-page__suggest {
+  position: absolute;
+  top: 20px;
+  right: 220px;
+  z-index: 10;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  color: var(--fg);
+  padding: 6px 16px;
+  font-size: 13px;
+  letter-spacing: 1px;
+  cursor: pointer;
+  opacity: 0.6;
+  transition: opacity 0.2s;
+}
+
+.country-page__suggest:hover {
+  opacity: 1;
+}
+
 .country-page__loading,
 .country-page__no-states {
   position: absolute;

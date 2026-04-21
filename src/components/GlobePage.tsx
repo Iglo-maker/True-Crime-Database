@@ -5,6 +5,7 @@ import * as THREE from 'three';
 import { useTranslation } from 'react-i18next';
 import { useCountriesGeo } from '../hooks/useGeoData';
 import { useTheme } from '../contexts/ThemeContext';
+import { getCaseCountsByCountry } from '../firebase/cases';
 import BackArrow from './BackArrow';
 import GlobeControls from './GlobeControls';
 import './GlobePage.css';
@@ -42,9 +43,18 @@ export default function GlobePage() {
   const [sunPosition, setSunPosition] = useState(1);
   const [hovered, setHovered] = useState<GeoJSON.Feature | null>(null);
   const [panelOpen, setPanelOpen] = useState(false);
+  const [heatmap, setHeatmap] = useState(false);
+  const [caseCounts, setCaseCounts] = useState<Record<string, number>>({});
 
   // Always use day texture — DirectionalLight creates the day/night shadow naturally
   const globeImage = DAY_IMG;
+
+  // Load case counts when heatmap is enabled
+  useEffect(() => {
+    if (heatmap && Object.keys(caseCounts).length === 0) {
+      getCaseCountsByCountry().then(setCaseCounts).catch(() => {});
+    }
+  }, [heatmap]);
 
   // Set up rotation controls
   useEffect(() => {
@@ -205,10 +215,20 @@ export default function GlobePage() {
 
   const polygonCapColor = useCallback(
     (feat: any) => {
-      if (feat === hovered) return inverted ? 'rgba(0,0,0,0.25)' : 'rgba(255,255,255,0.15)';
-      return inverted ? 'rgba(0,0,0,0.05)' : 'rgba(255,255,255,0.05)';
+      if (feat === hovered) return 'rgba(255,255,255,0.25)';
+      if (heatmap) {
+        const code = getCountryCode(feat);
+        const count = caseCounts[code] || 0;
+        if (count === 0) return 'rgba(255,255,255,0.03)';
+        // logarithmic scale: 1→light, 10+→intense red
+        const intensity = Math.min(1, Math.log10(count + 1) / Math.log10(15));
+        const r = Math.round(80 + intensity * 175);
+        const g = Math.round(20 - intensity * 20);
+        return `rgba(${r},${g},20,${0.25 + intensity * 0.55})`;
+      }
+      return 'rgba(255,255,255,0.05)';
     },
-    [hovered, inverted]
+    [hovered, heatmap, caseCounts]
   );
 
   const polygonSideColor = useCallback(
@@ -256,6 +276,14 @@ export default function GlobePage() {
         {rotating ? '\u23F8' : '\u25B6'}
       </button>
 
+      <button
+        className="globe-page__stats-btn"
+        onClick={() => navigate('/stats')}
+        title={t('stats.title')}
+      >
+        📊
+      </button>
+
       <div
         className={`globe-page__panel-trigger ${panelOpen ? 'open' : ''}`}
         onMouseEnter={() => setPanelOpen(true)}
@@ -268,6 +296,8 @@ export default function GlobePage() {
             onSunChange={handleSunChange}
             speed={speed}
             onSpeedChange={setSpeed}
+            heatmap={heatmap}
+            onHeatmapToggle={() => setHeatmap((h) => !h)}
           />
         )}
       </div>

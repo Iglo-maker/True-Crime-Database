@@ -5,6 +5,48 @@
   padding: 60px 24px 24px;
 }
 
+.admin__tabs {
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+  margin-bottom: 32px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  padding-bottom: 0;
+}
+
+.admin__tab {
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: var(--fg-muted);
+  font-size: 13px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 8px 20px;
+  cursor: pointer;
+  position: relative;
+  margin-bottom: -1px;
+  transition: color 0.2s;
+}
+
+.admin__tab:hover { color: var(--fg); }
+.admin__tab.active {
+  color: var(--fg);
+  border-bottom-color: var(--fg);
+}
+
+.admin__tab-badge {
+  position: absolute;
+  top: 4px;
+  right: 6px;
+  background: #f44336;
+  color: #fff;
+  font-size: 10px;
+  border-radius: 10px;
+  padding: 1px 5px;
+  line-height: 1.4;
+}
+
 .admin__title {
   text-align: center;
   font-size: 22px;

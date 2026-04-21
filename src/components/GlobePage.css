@@ -51,6 +51,29 @@
   background: rgba(255, 255, 255, 0.15);
 }
 
+.globe-page__stats-btn {
+  position: absolute;
+  bottom: 72px;
+  right: 20px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid var(--fg);
+  background: rgba(0, 0, 0, 0.3);
+  color: var(--fg);
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  transition: background 0.2s;
+  backdrop-filter: blur(4px);
+}
+
+.globe-page__stats-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
 /* Side panel */
 .globe-page__panel-trigger {
   position: absolute;

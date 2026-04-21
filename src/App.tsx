@@ -6,6 +6,7 @@ import GlobePage from './components/GlobePage';
 import CountryPage from './components/CountryPage';
 import CasesPage from './components/CasesPage';
 import AdminDashboard from './components/AdminDashboard';
+import StatsPage from './components/StatsPage';
 import UserBadge from './components/UserBadge';
 import LanguageSwitch from './components/LanguageSwitch';
 
@@ -20,6 +21,7 @@ export default function App() {
             <Route path="/country/:countryCode" element={<CountryPage />} />
             <Route path="/country/:countryCode/state/:stateCode" element={<CasesPage />} />
             <Route path="/admin" element={<AdminDashboard />} />
+            <Route path="/stats" element={<StatsPage />} />
           </Routes>
           <UserBadge />
           <LanguageSwitch />

@@ -10,7 +10,8 @@
     "night": "Night",
     "invertColors": "Invert Colors",
     "speed": "Speed",
-    "controls": "Controls"
+    "controls": "Controls",
+    "heatmap": "Heatmap"
   },
   "country": {
     "back": "Back",
@@ -27,6 +28,7 @@
     "searchPlaceholder": "Search cases...",
     "noResults": "No matches found",
     "results": "results",
+    "filterAll": "All",
     "title": "Title",
     "date": "Date",
     "status": "Status",
@@ -43,6 +45,25 @@
     "loginRequired": "Please log in to manage cases",
     "casesIn": "Cases in"
   },
+  "suggestion": {
+    "btn": "Suggest a case",
+    "title": "Suggest a case",
+    "hint": "Write the name of the case you want to suggest:",
+    "placeholder": "Case name...",
+    "submit": "Submit",
+    "cancel": "Cancel",
+    "sent": "Suggestion submitted!",
+    "close": "Close"
+  },
+  "stats": {
+    "title": "Statistics",
+    "total": "Total cases",
+    "solved": "Solved",
+    "unsolved": "Unsolved",
+    "solvedRatio": "Solved / Unsolved",
+    "byType": "By type",
+    "topCountries": "Top 10 countries"
+  },
   "auth": {
     "login": "Log in",
     "logout": "Log out",
@@ -58,10 +79,14 @@
     "status": "Status",
     "recentActivity": "Recent Activity",
     "noActivity": "No activity",
+    "noSuggestions": "No suggestions yet",
     "added": "added",
     "edited": "edited",
     "deleted": "deleted",
-    "justNow": "Just now"
+    "justNow": "Just now",
+    "tab_members": "Members",
+    "tab_activity": "Activity",
+    "tab_suggestions": "Suggestions"
   },
   "types": {
     "Mord": "Murder",
