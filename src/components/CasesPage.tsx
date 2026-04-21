@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import { useParams, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../contexts/AuthContext';
@@ -20,6 +20,7 @@ export default function CasesPage() {
 
   const countryName = (location.state as any)?.countryName || countryCode || '';
   const stateName = (location.state as any)?.stateName || stateCode || '';
+  const isAll = stateCode === 'ALL';
 
   const { cases, loading, reload } = useCases(countryCode || '', stateCode || '');
 
@@ -28,6 +29,31 @@ export default function CasesPage() {
   const [showAddModal, setShowAddModal] = useState(false);
   const [editingCase, setEditingCase] = useState<Case | null>(null);
   const [deletingCase, setDeletingCase] = useState<Case | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [showSuggestions, setShowSuggestions] = useState(false);
+
+  // Live-filtered cases
+  const filteredCases = useMemo(() => {
+    if (!searchQuery.trim()) return cases;
+    const q = searchQuery.toLowerCase();
+    return cases.filter(
+      (c) =>
+        c.title.toLowerCase().includes(q) ||
+        c.description?.toLowerCase().includes(q) ||
+        c.stateName?.toLowerCase().includes(q)
+    );
+  }, [cases, searchQuery]);
+
+  // Autocomplete suggestions (by title)
+  const suggestions = useMemo(() => {
+    if (searchQuery.trim().length < 1) return [];
+    const q = searchQuery.toLowerCase();
+    return cases
+      .map((c) => c.title)
+      .filter((title) => title.toLowerCase().includes(q))
+      .filter((title, i, arr) => arr.indexOf(title) === i) // deduplicate
+      .slice(0, 8);
+  }, [cases, searchQuery]);
 
   const handleAdd = useCallback(
     async (data: { title: string; date: string; status: 'solved' | 'unsolved'; type: CaseType; description: string }) => {
@@ -93,9 +119,39 @@ export default function CasesPage() {
       {/* Header */}
       <div className="cases-page__header">
         <h1 className="cases-page__title">
-          {t('cases.casesIn')} {stateCode === 'ALL' ? countryName : stateName}
+          {t('cases.casesIn')} {isAll ? countryName : stateName}
         </h1>
-        {stateCode !== 'ALL' && <p className="cases-page__subtitle">{countryName}</p>}
+        {!isAll && <p className="cases-page__subtitle">{countryName}</p>}
+      </div>
+
+      {/* Search bar */}
+      <div className="cases-page__search-wrapper">
+        <input
+          className="cases-page__search"
+          type="text"
+          placeholder={t('cases.searchPlaceholder')}
+          value={searchQuery}
+          onChange={(e) => { setSearchQuery(e.target.value); setShowSuggestions(true); }}
+          onFocus={() => setShowSuggestions(true)}
+          onBlur={() => setTimeout(() => setShowSuggestions(false), 150)}
+          autoComplete="off"
+        />
+        {searchQuery && (
+          <button className="cases-page__search-clear" onClick={() => setSearchQuery('')}>✕</button>
+        )}
+        {showSuggestions && suggestions.length > 0 && (
+          <div className="cases-page__suggestions">
+            {suggestions.map((s) => (
+              <div
+                key={s}
+                className="cases-page__suggestion"
+                onMouseDown={() => { setSearchQuery(s); setShowSuggestions(false); }}
+              >
+                {s}
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Action buttons - only shown when logged in */}
@@ -125,10 +181,17 @@ export default function CasesPage() {
       {/* Cases list */}
       <div className="cases-page__list">
         {loading && <p className="cases-page__empty">Loading...</p>}
-        {!loading && cases.length === 0 && (
-          <p className="cases-page__empty">{t('cases.noCases')}</p>
+        {!loading && filteredCases.length === 0 && (
+          <p className="cases-page__empty">
+            {searchQuery ? t('cases.noResults') : t('cases.noCases')}
+          </p>
         )}
-        {cases.map((c) => (
+        {!loading && searchQuery && (
+          <p className="cases-page__result-count">
+            {filteredCases.length} {t('cases.results')}
+          </p>
+        )}
+        {filteredCases.map((c) => (
           <CaseCard
             key={c.id}
             caseData={c}
@@ -144,7 +207,6 @@ export default function CasesPage() {
       {showAddModal && (
         <CaseModal onSave={handleAdd} onCancel={() => setShowAddModal(false)} />
       )}
-
       {editingCase && (
         <CaseModal
           initial={editingCase}
@@ -152,7 +214,6 @@ export default function CasesPage() {
           onCancel={() => { setEditingCase(null); setEditMode(false); }}
         />
       )}
-
       {deletingCase && (
         <DeleteConfirm
           onConfirm={handleDelete}

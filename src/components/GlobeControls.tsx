@@ -1,5 +1,4 @@
 import { useTranslation } from 'react-i18next';
-import { useTheme } from '../contexts/ThemeContext';
 
 interface Props {
   sunPosition: number;
@@ -10,7 +9,6 @@ interface Props {
 
 export default function GlobeControls({ sunPosition, onSunChange, speed, onSpeedChange }: Props) {
   const { t } = useTranslation();
-  const { toggleTheme } = useTheme();
 
   return (
     <div style={{
@@ -39,26 +37,6 @@ export default function GlobeControls({ sunPosition, onSunChange, speed, onSpeed
           <span style={{ fontSize: 12, opacity: 0.6 }}>{t('globe.day')}</span>
         </div>
       </div>
-
-      {/* Theme toggle */}
-      <button
-        onClick={toggleTheme}
-        style={{
-          background: 'none',
-          border: '1px solid var(--fg)',
-          color: 'var(--fg)',
-          padding: '6px 12px',
-          borderRadius: 4,
-          fontSize: 12,
-          textTransform: 'uppercase',
-          letterSpacing: 1,
-          transition: 'background 0.2s',
-        }}
-        onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(255,255,255,0.1)')}
-        onMouseLeave={(e) => (e.currentTarget.style.background = 'none')}
-      >
-        {t('globe.invertColors')}
-      </button>
 
       {/* Speed slider */}
       <div>

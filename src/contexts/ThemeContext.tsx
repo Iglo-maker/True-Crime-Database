@@ -1,25 +1,15 @@
-import { createContext, useContext, useState, useCallback, ReactNode } from 'react';
+import { createContext, useContext, ReactNode } from 'react';
 
 interface ThemeContextType {
   inverted: boolean;
-  toggleTheme: () => void;
 }
 
-const ThemeContext = createContext<ThemeContextType>({
-  inverted: false,
-  toggleTheme: () => {},
-});
+const ThemeContext = createContext<ThemeContextType>({ inverted: false });
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [inverted, setInverted] = useState(false);
-
-  const toggleTheme = useCallback(() => {
-    setInverted((prev) => !prev);
-  }, []);
-
   return (
-    <ThemeContext.Provider value={{ inverted, toggleTheme }}>
-      <div className={inverted ? 'theme-inverted' : ''} style={{ width: '100%', height: '100%' }}>
+    <ThemeContext.Provider value={{ inverted: false }}>
+      <div style={{ width: '100%', height: '100%' }}>
         {children}
       </div>
     </ThemeContext.Provider>

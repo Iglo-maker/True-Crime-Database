@@ -24,12 +24,12 @@ if (configStr) {
   firebaseConfig = JSON.parse(configStr);
 } else {
   firebaseConfig = {
-    apiKey: 'YOUR_API_KEY',
-    authDomain: 'YOUR_PROJECT.firebaseapp.com',
-    projectId: 'YOUR_PROJECT_ID',
-    storageBucket: 'YOUR_PROJECT.appspot.com',
-    messagingSenderId: 'YOUR_SENDER_ID',
-    appId: 'YOUR_APP_ID',
+    apiKey: 'AIzaSyCw74CMH8mbcETbLU63xtkjQvwUisLsdBo',
+    authDomain: 'true-crime-d75c1.firebaseapp.com',
+    projectId: 'true-crime-d75c1',
+    storageBucket: 'true-crime-d75c1.firebasestorage.app',
+    messagingSenderId: '910168837368',
+    appId: '1:910168837368:web:8eeefcdfb51b6378cf3f0d',
   };
 }
 
