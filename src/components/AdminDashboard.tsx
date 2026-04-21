@@ -55,10 +55,19 @@ export default function AdminDashboard() {
   }
 
   async function toggleActive(name: string, current: boolean) {
-    await setMemberActive(name, !current);
+    // Optimistic update
     setMembers((prev) =>
       prev.map((m) => (m.name === name ? { ...m, active: !current } : m))
     );
+    try {
+      await setMemberActive(name, !current);
+    } catch (err) {
+      // Revert on failure
+      setMembers((prev) =>
+        prev.map((m) => (m.name === name ? { ...m, active: current } : m))
+      );
+      console.error('Toggle failed:', err);
+    }
   }
 
   const actionLabel = (action: string) => {

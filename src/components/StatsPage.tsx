@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+
 import { getDocs, collection } from 'firebase/firestore';
 import { db } from '../firebase/config';
 import { CASE_TYPES } from '../types';
@@ -96,7 +97,7 @@ export default function StatsPage() {
         <div className="stats-bars">
           {byType.map(({ type, count }) => (
             <div key={type} className="stats-row">
-              <span className="stats-row__label">{type}</span>
+              <span className="stats-row__label">{t(`types.${type}`)}</span>
               <div className="stats-row__track">
                 <div
                   className="stats-row__fill"

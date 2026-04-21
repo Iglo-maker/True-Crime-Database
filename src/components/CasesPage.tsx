@@ -186,11 +186,11 @@ export default function CasesPage() {
               className={`cases-page__chip ${filterTypes.includes(type) ? 'active' : ''}`}
               onClick={() =>
                 setFilterTypes((prev) =>
-                  prev.includes(type) ? prev.filter((t) => t !== type) : [...prev, type]
+                  prev.includes(type) ? prev.filter((tt) => tt !== type) : [...prev, type]
                 )
               }
             >
-              {type}
+              {t(`types.${type}`)}
             </button>
           ))}
         </div>
